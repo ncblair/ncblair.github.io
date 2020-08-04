@@ -56,27 +56,20 @@ function setup() {
 
   var play = document.getElementById("play");
   var pause = document.getElementById("pause");
-  play.onclick = function() {
-    isPlaying = true;
-    play.style.display="none";
-    pause.style.display="block";
-  };
-  pause.onclick=function() {
-    isPlaying = false;
-    pause.style.display="none";
-    play.style.display="block";
-  };
+  var vol = document.getElementById("volume");
+  function play_audio() {
+    if (isPlaying == true) {
+      vol.style.color = "rgb(0, 0, 0)";
+    }
+    else {
+      vol.style.color = "rgb(249, 211, 211)";
+    }
+    isPlaying = !isPlaying;
+  }
+  vol.addEventListener("click", play_audio);
   document.body.onkeyup = function(e){
     if (e.keyCode === 32 || e.key === ' ') {
-      if (isPlaying) {
-        pause.style.display="none";
-        play.style.display="block";
-      }
-      else {
-        play.style.display="none";
-        pause.style.display="block";
-      }
-      isPlaying = !isPlaying;
+      play_audio();
     }
   }
 
@@ -147,6 +140,8 @@ function draw() {
           bgred -= 20*r/mag;
           bggreen -= 20*g/mag;
           bgblue -= 20*b/mag;
+          fill(color(255 - r + 10, 255-g+10, 255 - b + 10));
+          rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
         }
       }
     }

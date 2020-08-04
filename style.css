@@ -1,3 +1,5 @@
+
+
 #container {
   width: 100%;
   height: 100%;
@@ -29,7 +31,8 @@
 body {
   margin: 0;
   overflow: hidden;
-  background-color:rgb(218, 218, 218);
+  //background-color:rgb(218, 218, 218);
+  background-color:black;
 }
 
 #title {
@@ -55,27 +58,28 @@ body {
   margin-right: auto;
 }
 
-#play {
-  position:fixed;
-  left:calc(50% - 25px);
-  bottom:.7%;
-  height:8%;
+
+i.fa-volume-up {
+  text-align:center;
+  font-size:40px;
+  display:inline-block;
+  color:black;
 }
 
-#pause {
-  height:6%;
-  position:fixed;
-  left:calc(50% - 22px);
-  bottom:1.3%;
-  display:none;
+i.fa-volume-up:hover {
+  color:rgb(249, 211, 211);
 }
+
 
 #bottom-bar{
   width:100%;
-  height:8%;
+  height:4%;
   position:fixed;
   background-color:white;
   bottom:0;
+  display:block;
+  padding-bottom:2%;
+  text-align:center;
 }
 
 #bg-img{
@@ -90,7 +94,6 @@ body {
 
 #navbar > a {
   font-size:35;
-  text-align:center;
   display: inline-block;
   display: -moz-inline-box;
   *display: inline; /* For IE7 */
@@ -116,16 +119,25 @@ body {
 }
 
 #sub_content {
-  background-image:url("img/mystery_gift.png");
-  background-repeat: no-repeat;
-  background-color:rgb(0, 0, 0);
-  background-size:100% 100%;
   text-align:center;
   color:black;
   
   height:calc(100% - 6vw);
   width:calc(100% - 6vw);
   padding:1vw;
+  background-color:black;
+  overflow:hidden;
+}
+
+#mystery_gift {
+  width: 100%;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  //height:100%;
+  border-radius:30px;
+  border:none;
 }
 
 #sub_content:before {
@@ -157,7 +169,17 @@ body {
   width:calc(100% - 4vw);
   background-color:black;
   position:relative;
-  overflow:auto;
+}
+#about_text_container {
+  text-align:justified;
+  height:100%;
+  width:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  overflow:hidden;
 }
 
 #about_art {
@@ -168,9 +190,11 @@ body {
 
 #about_text {
   z-index:1;
-  color:rgb(249, 211, 211);
   position:absolute;
-  top:10%;
+  top:2%;
   left:68%;
   width: 32%;
+  text-align: center;
+  height:100%;
+  overflow:hidden;
 }

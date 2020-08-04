@@ -8,14 +8,12 @@ var box_w;
 var box_h;
 var matrixTransform;
 var PALLET;
-var bgred, bggreen, bgblue;
 var current_page;
 
 let playMode = 'sustain';
 let sample;
 let SEQ_LEN = 8;
 let NOTES = ["A3", "C2", "D4", "G3"];
-let DECAY = 3;
 
 
 function setup() {
@@ -28,13 +26,16 @@ function setup() {
   position = 0;
   mini_pos = 0;
   isPlaying = false;
-  PALLET = [color(119, 133, 173), color(189, 109, 89), 
-            color(110, 193, 188), color(206, 199, 90), 
-            color(249, 211, 211), color(97, 174, 39)];
+  //PALLET = [color(119, 133, 173), color(189, 109, 89), 
+  //          color(110, 193, 188), color(206, 199, 90), 
+  //          color(249, 211, 211), color(97, 174, 39)];
+            
+  PALLET = [color(249, 211, 211), color(249, 211, 211), 
+          color(249, 211, 211), color(249, 211, 211), 
+          color(249, 211, 211), color(97, 174, 39)];
+            
 
-  bgred = 255;
-  bggreen = 255;
-  bgblue = 255;
+
   var rand1 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
   var rand2 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
   for (var i = 0; i < NOTES.length; i++) {
@@ -48,30 +49,16 @@ function setup() {
         grid[i].push(1);
       }
       grid[i].push(0);
-      
     }
   }
   var cnv = createCanvas(windowWidth, windowHeight);
-  cnv.parent('container');
-
-  var play = document.getElementById("play");
-  var pause = document.getElementById("pause");
-  var vol = document.getElementById("volume");
-  function play_audio() {
-    if (isPlaying == true) {
-      vol.style.color = "rgb(0, 0, 0)";
-    }
-    else {
-      vol.style.color = "rgb(249, 211, 211)";
-    }
-    isPlaying = !isPlaying;
-  }
-  vol.addEventListener("click", play_audio);
+  cnv.parent("container");
+  
   document.body.onkeyup = function(e){
     if (e.keyCode === 32 || e.key === ' ') {
-      play_audio();
+      isPlaying = !isPlaying;
     }
-  }
+  };
 
   var st = window.getComputedStyle(cnv.canvas, null);
 
@@ -101,7 +88,6 @@ function loaded() {
 function draw() {
   if ((mini_pos % 5) == 0) {
     background(0);
-    stroke(100);
     strokeWeight(1);
     box_w = width / SEQ_LEN;
     box_h = height / NOTES.length;
@@ -123,7 +109,7 @@ function draw() {
         }
         
         
-        fill(255);
+        fill(color(26, 26, 26));
         rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
   
         if (grid[i][j] == 1) {
@@ -136,10 +122,6 @@ function draw() {
           var r = (255 - red(PALLET[i]));
           var g = (255 - green(PALLET[i]));
           var b = (255 - blue(PALLET[i]));
-          mag = Math.sqrt(r*r + g*g + b*b);
-          bgred -= 20*r/mag;
-          bggreen -= 20*g/mag;
-          bgblue -= 20*b/mag;
           fill(color(255 - r + 10, 255-g+10, 255 - b + 10));
           rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
         }
@@ -154,14 +136,6 @@ function draw() {
   
   
   mini_pos += 1;
-  bgred += DECAY;
-  bggreen += DECAY;
-  bgblue += DECAY;
-  bgred = max(min(bgred, 255), 150);
-  bgblue = max(min(bgblue, 255), 150);
-  bggreen = max(min(bggreen, 255), 150);
-  document.body.style.backgroundColor = "rgb(" + bgred.toString() + "," + bggreen.toString() + "," + bgblue.toString() + ")";
-
 }
 
 function mousePressed(event) {
@@ -196,7 +170,7 @@ function page_sw(page) {
   }
   else {
     document.getElementById(current_page + "_content").style.display = "none";
-    document.getElementById(current_page).style.color = "rgb(0, 0, 0)";
+    document.getElementById(current_page).style.color = "rgb(26, 26, 26)";
   }
   
   if (current_page != page) {

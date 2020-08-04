@@ -1,12 +1,10 @@
 var sounds;
-var num_loaded;
+var start_sound;
 var grid;
 var position;
-var mini_pos;
 var isPlaying;
 var box_w;
 var box_h;
-var matrixTransform;
 var PALLET;
 var current_page;
 
@@ -17,14 +15,14 @@ let NOTES = ["A3", "C2", "D4", "G3"];
 
 
 function setup() {
-  frameRate(20);
+  frameRate(4);
+  
   
   current_page = "defaultCanvas0";
   sounds = [];
   num_loaded = 0;
   grid = [];
   position = 0;
-  mini_pos = 0;
   isPlaying = false;
   //PALLET = [color(119, 133, 173), color(189, 109, 89), 
   //          color(110, 193, 188), color(206, 199, 90), 
@@ -34,14 +32,14 @@ function setup() {
           color(249, 211, 211), color(249, 211, 211), 
           color(249, 211, 211), color(97, 174, 39)];
             
-
+  start_sound = loadSound("sounds/fireplace.mp3");
 
   var rand1 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
   var rand2 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
+
   for (var i = 0; i < NOTES.length; i++) {
     note = NOTES[i];
-    sounds.push(loadSound("sounds/blip" + note + ".mp3", loaded));
-    //sounds[sounds.length - 1].setVolume(0.5);
+    sounds.push(loadSound("sounds/blip" + note + ".mp3"));
     
     grid.push([]);
     for (var j = 0; j < SEQ_LEN; j++) {
@@ -56,86 +54,63 @@ function setup() {
   
   document.body.onkeyup = function(e){
     if (e.keyCode === 32 || e.key === ' ') {
-      isPlaying = !isPlaying;
+      if (isPlaying) {
+        start_sound.stop();
+      }
+      else {
+        start_sound.loop();
+      }
+      isPlaying = !isPlaying; 
     }
   };
 
-  var st = window.getComputedStyle(cnv.canvas, null);
-
-  var tr = st.getPropertyValue("-webkit-transform") ||
-         st.getPropertyValue("-moz-transform") ||
-         st.getPropertyValue("-ms-transform") ||
-         st.getPropertyValue("-o-transform") ||
-         st.getPropertyValue("transform") ||
-         "Either no transform set, or browser doesn't do getComputedStyle";
-
-  tr = tr.match(/\(\s*(.*)\s*\)/)[1].split(/\s*,\s*/).map(function(string) {
-    return parseFloat(string);
-  });
-  var rows = [[], [], [], []];
-  for (var c = 0; c < tr.length; c++) {
-    rows[c % 4][Math.floor(c / 4)] = tr[c];
-  }
-  // Make a math.js matrix of the transform
-  matrixTransform = math.inv(math.matrix(rows));
-
-}
-
-function loaded() {
-  num_loaded++;
 }
 
 function draw() {
-  if ((mini_pos % 5) == 0) {
-    background(0);
-    strokeWeight(1);
-    box_w = width / SEQ_LEN;
-    box_h = height / NOTES.length;
-    var off = box_w/6;
-    
-    for (var i = 0; i < NOTES.length; i++) {
-      for (var j = 0; j < SEQ_LEN; j++) {
-        
-        x = j*box_w;
-        y = i*box_h;
-        
-        if (position == j) {
-          strokeWeight(off);
-          strokeCap(PROJECT);
-          stroke(249, 211, 211);
-          line(x, height, x+box_w, height);
-          stroke(0, 0, 0);
-          strokeWeight(0);
-        }
-        
-        
-        fill(color(26, 26, 26));
-        rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
+  background(0);
+  strokeWeight(1);
+  box_w = width / SEQ_LEN;
+  box_h = height / NOTES.length;
+  var off = box_w/6;
   
-        if (grid[i][j] == 1) {
-          fill(PALLET[i]);
-          rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
-        }
-        
-        if (isPlaying && position == j && grid[i][j] == 1) {
-          sounds[i].play();
-          var r = (255 - red(PALLET[i]));
-          var g = (255 - green(PALLET[i]));
-          var b = (255 - blue(PALLET[i]));
-          fill(color(255 - r + 10, 255-g+10, 255 - b + 10));
-          rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
-        }
+  for (var i = 0; i < NOTES.length; i++) {
+    for (var j = 0; j < SEQ_LEN; j++) {
+      
+      x = j*box_w;
+      y = i*box_h;
+      
+      if (position == j) {
+        strokeWeight(off);
+        strokeCap(PROJECT);
+        stroke(249, 211, 211);
+        line(x, height, x+box_w, height);
+        stroke(0, 0, 0);
+        strokeWeight(0);
       }
-    }
-    
-    if (isPlaying) {
-      position = (position + 1) % SEQ_LEN;
+      
+      
+      fill(color(26, 26, 26));
+      rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
+
+      if (grid[i][j] == 1) {
+        fill(PALLET[i]);
+        rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
+      }
+      
+      if (isPlaying && position == j && grid[i][j] == 1) {
+        sounds[i].play();
+        var r = (255 - red(PALLET[i]));
+        var g = (255 - green(PALLET[i]));
+        var b = (255 - blue(PALLET[i]));
+        fill(color(255 - r + 6, 255-g+15, 255 - b + 15));
+        rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
+      }
     }
   }
   
-  
-  
-  mini_pos += 1;
+  if (isPlaying) {
+    position = (position + 1) % SEQ_LEN;
+  }
 }
 
 function mousePressed(event) {

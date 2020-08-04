@@ -121,7 +121,7 @@ body {
   #container > div {
     transform-style: preserve-3d;
     /* added translation here */
-    transform: translateY(80vmax) translateZ(-40vmax) rotateX(45deg);
+    transform: translateY(70vmax) translateZ(-40vmax) rotateX(45deg);
     border-width:4vw;
     border-style:solid;
     border-color:transparent;

@@ -14,7 +14,7 @@
   transform: translateZ(-50vmax) rotateX(45deg);
   border-width:2vw;
   border-style:solid;
-  opacity:50%;
+  opacity:75%;
 }
 
 #container > div {
@@ -39,14 +39,14 @@ body {
 #title {
   margin-top:50;
   text-align:center;
-  opacity:50%;
+  opacity:75%;
 }
 
 #title > a {
   font-size:50;
   transform-style: preserve-3d;
   /* added translation here */
-  color:rgb(26, 26, 26);
+  color:rgb(50,50, 50);
   text-decoration:none;
 }
 
@@ -109,7 +109,7 @@ body {
   display:none;
 }
 
-@media screen and (max-width: 481px{
+@media screen and (max-width: 481px){
   
   #defaultCanvas0 {
     display:none;
@@ -155,22 +155,6 @@ body {
   }
   #title {
     display:none;
-  }
-  
-  #container > div {
-    transform-style: preserve-3d;
-    /* added translation here */
-    transform: translateY(80vmax) translateZ(-40vmax) rotateX(45deg);
-    border-width:4vw;
-    border-style:solid;
-    border-color:transparent;
-    display:block;
-    font-size:40px;
-  }
-  
-  body {
-    position:relative;
-    overflow:hidden;
   }
   
   #about_text {

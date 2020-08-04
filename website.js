@@ -170,7 +170,7 @@ function page_sw(page) {
   }
   else {
     document.getElementById(current_page + "_content").style.display = "none";
-    document.getElementById(current_page).style.color = "rgb(26, 26, 26)";
+    document.getElementById(current_page).style.color = "rgb(50, 50,50)";
   }
   
   if (current_page != page) {

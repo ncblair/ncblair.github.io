@@ -48,11 +48,11 @@ body {
 }
 
 
-.center {
-  display:block;
-  margin-left: auto;
-  margin-right: auto;
-}
+//.center {
+//  display:block;
+//  margin-left: auto;
+//  margin-right: auto;
+//}
 
 
 #bg-img{
@@ -103,6 +103,14 @@ body {
 }
 
 #about_text_mobile {
+  z-index:1;
+  position:absolute;
+  top:2%;
+  left:0%;
+  width: 100%;
+  text-align: center;
+  height:100%;
+  font-size:60px;
   display:none;
 }
 
@@ -143,22 +151,9 @@ body {
   }
 }
 
-@supports -moz-appearance:none{
+@-moz-document url-prefix() {
   /* Firefox */
-  
-    
   #defaultCanvas0 {
-    display:none;
-  }
-  #title {
-    display:none;
-  }
-  
-  #about_text {
-    display:none;
-  }
-  
-  #about_text_mobile {
-    display:initial;
+    transform: translateZ(-50vmax) translateY(10vmax);
   }
 }

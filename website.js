@@ -12,7 +12,7 @@ var current_page;
 let playMode = 'sustain';
 let sample;
 let SEQ_LEN = 8;
-let NOTES = ["A3", "C2", "D4", "G3"];
+let NOTES = ["A3", "E2", "D4", "G3"];
 
 
 function setup() {
@@ -39,11 +39,13 @@ function setup() {
   var rand2 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
   
   start_sound = loadSound("sounds/fireplace.mp3");
+  start_sound.setVolume(0.2);
   
   for (var i = 0; i < NOTES.length; i++) {
     note = NOTES[i];
     
     sounds.push(loadSound("sounds/blip" + note + ".mp3"));
+    sounds[i].setVolume(1.3);
     
     grid.push([]);
     for (var j = 0; j < SEQ_LEN; j++) {

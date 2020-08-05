@@ -18,9 +18,6 @@
   transform-style: preserve-3d;
   /* added translation here */
   transform: translateZ(-50vmax) rotateX(45deg);
-  border-width:4vw;
-  border-style:solid;
-  border-color:transparent;
   display:none;
   font-size:40px;
 }
@@ -126,12 +123,9 @@ body {
   #container > div {
     transform-style: preserve-3d;
     /* added translation here */
-    transform: translateY(70vmax) translateZ(-40vmax) rotateX(45deg);
-    border-width:4vw;
-    border-style:solid;
-    border-color:transparent;
+    transform: translateY(40vmax) translateZ(-50vmax) rotateX(30deg);
     display:block;
-    font-size:40px;
+    font-size:30px;
   }
   
   body {

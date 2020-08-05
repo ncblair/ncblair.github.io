@@ -12,9 +12,6 @@
   transform-style: preserve-3d;
   /* added translation here */
   transform: translateZ(-50vmax) rotateX(45deg);
-  border-width:2vw;
-  border-style:solid;
-  opacity:75%;
 }
 
 #container > div {
@@ -39,7 +36,7 @@ body {
 #title {
   margin-top:50;
   text-align:center;
-  opacity:75%;
+  opacity:100%;
 }
 
 #title > a {

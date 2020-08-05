@@ -3,6 +3,7 @@ var start_sound;
 var grid;
 var position;
 var isPlaying;
+var started;
 var box_w;
 var box_h;
 var PALLET;
@@ -17,7 +18,7 @@ let NOTES = ["A3", "C2", "D4", "G3"];
 function setup() {
   frameRate(4);
   
-  
+  started=false;
   current_page = "defaultCanvas0";
   sounds = [];
   num_loaded = 0;
@@ -32,13 +33,16 @@ function setup() {
           color(249, 211, 211), color(249, 211, 211), 
           color(249, 211, 211), color(97, 174, 39)];
             
-  start_sound = loadSound("sounds/fireplace.mp3");
+  
 
   var rand1 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
   var rand2 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
-
+  
+  start_sound = loadSound("sounds/fireplace.mp3");
+  
   for (var i = 0; i < NOTES.length; i++) {
     note = NOTES[i];
+    
     sounds.push(loadSound("sounds/blip" + note + ".mp3"));
     
     grid.push([]);
@@ -61,55 +65,78 @@ function setup() {
         start_sound.loop();
       }
       isPlaying = !isPlaying; 
+      started=true;
     }
   };
-
+  textSize(width/30);
+  textAlign(CENTER, CENTER);
+  textFont('monospace');
+  
+  document.getElementById("about").onmouseover = function() {
+    document.getElementById("about").style.color = "rgb(249, 211, 211)";
+  };
+  document.getElementById("about").onmouseout = function() {
+    if (current_page == "defaultCanvas0"){
+      document.getElementById("about").style.color = "rgb(50, 50, 50)";
+    }
+  };
 }
 
-function draw() {
-  background(0);
-  strokeWeight(1);
-  box_w = width / SEQ_LEN;
-  box_h = height / NOTES.length;
-  var off = box_w/6;
-  
-  for (var i = 0; i < NOTES.length; i++) {
-    for (var j = 0; j < SEQ_LEN; j++) {
-      
-      x = j*box_w;
-      y = i*box_h;
-      
-      if (position == j) {
-        strokeWeight(off);
-        strokeCap(PROJECT);
-        stroke(249, 211, 211);
-        line(x, height, x+box_w, height);
-        stroke(0, 0, 0);
-        strokeWeight(0);
-      }
-      
-      
-      fill(color(26, 26, 26));
-      rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
 
-      if (grid[i][j] == 1) {
-        fill(PALLET[i]);
-        rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
-      }
-      
-      if (isPlaying && position == j && grid[i][j] == 1) {
-        sounds[i].play();
-        var r = (255 - red(PALLET[i]));
-        var g = (255 - green(PALLET[i]));
-        var b = (255 - blue(PALLET[i]));
-        fill(color(255 - r + 6, 255-g+15, 255 - b + 15));
-        rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
-      }
-    }
+function draw() {
+  clear();
+  background(0, 0, 0, 0);
+  pixel_rect(0, 0, width, height, 20, 1, color(255, 255, 255), 0);
+  if (started==false) {
+    fill(249, 211, 211);
+    text('sound on. press spacebar.', width/2, height/2);
   }
   
-  if (isPlaying) {
-    position = (position + 1) % SEQ_LEN;
+  else{
+    strokeWeight(1);
+    box_w = width / SEQ_LEN;
+    box_h = height / NOTES.length;
+    var off = Math.round(box_w/7);
+    
+    for (var i = 0; i < NOTES.length; i++) {
+      for (var j = 0; j < SEQ_LEN; j++) {
+        
+        x = j*box_w;
+        y = i*box_h;
+        
+        if (position == j) {
+          //strokeWeight(off);
+          //strokeCap(PROJECT);
+          //stroke(249, 211, 211);
+          //line(x, height, x+box_w, height);
+          //stroke(0, 0, 0);
+          //strokeWeight(1);
+          
+          pixel_rect(x, height -10, box_w, 10, 10, 5, PALLET[i], 60);
+        }
+        
+        fill(0);
+        erase();
+        rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
+        noErase();
+        
+        if (isPlaying && position == j && grid[i][j] == 1) {
+          sounds[i].play();
+          var r = red(PALLET[i]);
+          var g = green(PALLET[i]);
+          var b = blue(PALLET[i]);
+          //rect(x + off, y + off, box_w - 2*off, box_h - 2*off);
+          pixel_rect(x + off, y + off, box_w - 2*off, box_h - 2*off, 10, 3, PALLET[i], 60);
+        }
+        else if (grid[i][j] == 1) {
+          pixel_rect(x + off, y + off, box_w - 2*off, box_h - 2*off, 10, 3, PALLET[i], 0);
+        }
+      }
+    }
+    
+    if (isPlaying) {
+      position = (position + 1) % SEQ_LEN;
+    }
   }
 }
 
@@ -159,6 +186,22 @@ function page_sw(page) {
   }
   
 }
+
+
+function pixel_rect(x, y, w, h, d1, d2, c, bias) {
+  noStroke();
+  //how much x coordinate grows
+  var r;
+  for (i=x; i<=(x+w); i+=d1) { // noprotect
+    for (j=y ;j<=(y+h) ; j+=d1){
+        r = Math.random();
+        fill(color(r*red(c) + bias, r*blue(c) + bias, r*green(c) + bias));
+        rect(i+Math.floor(d2/2),j+Math.floor(d2/2),d2,d2);
+    }
+  }
+}
+
+
 
 
 

@@ -48,10 +48,7 @@
             <div id="sidebar">
                 <div id="sidebar-parent" style="display:block;">
                     <div class = "sidebar-item" id="run-sequencer" style="border-left:20px;border-right:20px solid rgba(0, 0, 0, 0);">
-                        <button class="sidebar-item-text">run sequencer</button>
-                    </div>
-                    <div class = "sidebar-item" id="improvise">
-                        <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider0">
+                        <button class="sidebar-item-text" onclick="toggle_sound(32);" id="playpause">run sequencer</button>
                     </div>
                     <div class = "sidebar-item" id="improvise">
                         <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider1">
@@ -61,6 +58,9 @@
                     </div>
                     <div class = "sidebar-item" id="improvise">
                         <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider3">
+                    </div>
+                    <div class = "sidebar-item" id="run-sequencer" style="border-left:20px;border-right:20px solid rgba(0, 0, 0, 0);">
+                        <button class="sidebar-item-text" onclick="toggle_harmonizer();" style="background-color:mediumseagreen;" id="harmonizer">bass</button>
                     </div>
                 </div>
             </div>

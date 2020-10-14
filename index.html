@@ -1,64 +1,148 @@
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nathan Blair</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nathan Blair</title>
+    <script language="javascript" type="text/javascript" src="libraries/jquery-3.5.1.min.js"></script>
+    <script language="javascript" type="text/javascript" src="libraries/masonry.pkgd.min.js"></script>
 
-  <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
-  <script language="javascript" type="text/javascript" src="libraries/p5.min.js"></script>
-  <script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
-  <script language="javascript" type="text/javascript" src="website.js"></script>
-  <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
-  <script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  
+    <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
+    <script language="javascript" type="text/javascript" src="libraries/p5.min.js"></script>
+    <script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
+    <script language="javascript" type="text/javascript" src="website.js"></script>
+    <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
 
-
-  <!-- This line removes any default padding and style.
-       You might only need one of these values set. -->
-  <style> body { padding: 0; margin: 0; } </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 </head>
 
 <body>
-  <img src = "img/background.gif" id = "bg-img" >
-  <p id = "title"><a href="#nathanblair" onclick="page_sw('about')" id="about">ↂ</a></p>
-  <div id="container" class = "center">
-    <div id="about_content">
-      <img src = "img/me_sitting_transparent.png" id = "about_art">
-      <div id = "about_text_container">
-        <div id="about_text">
-          <div>
-            <br>
-            <a href = "https://www.fanlink.to/aMemoryOnFire/" target="_blank">MUSIC</a>
-            <br>
-            <br>
-            <a href = "img/mystery_gift.png" target="_blank">MYSTERY GIFT</a>
-            <br>
-            <br>
-            <a href = "https://www.twitter.com/nathanblair22/" target="_blank">TWITTER</a>
-            <br>
-            <br>
-            <a href = "https://www.instagram.com/nathanblair22/" target="_blank">INSTAGRAM</a>
-          </div>
+    <div id="header">
+		<div id="title"><a href="#" onclick="page_sw('home')" id="home">nathan blair</a></div>
+		<ul id="header-links" class="header-links">
+			<a id="sequencer" onclick="page_sw('sequencer')" href="#">
+				<li class="header-item" style="">
+					<div class="header-item-text">sequencer</div>
+				</li>
+			</a>
+			<a id="music" href="#" onclick="page_sw('music')">
+				<li class="header-item">
+					<div class="header-item-text">music</div>
+				</li>
+			</a>
+			<a id="papers" onclick="page_sw('papers')" href="#">
+				<li class="header-item">
+					<div class="header-item-text">papers</div>
+				</li>
+			</a>
+			<a id="store" onclick="page_sw('store')" href="#">
+				<li class="header-item" style="">
+					<div class="header-item-text">store</div>
+				</li>
+			</a>
+		</ul>
+	</div>
+
+    <div id = "main">
+        <div id="sidebar-outer">
+            <div id="sidebar">
+                <div id="sidebar-parent" style="display:block;">
+                    <div class = "sidebar-item" id="run-sequencer" style="border-left:20px;border-right:20px solid rgba(0, 0, 0, 0);">
+                        <button class="sidebar-item-text">run sequencer</button>
+                    </div>
+                    <div class = "sidebar-item" id="improvise">
+                        <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider0">
+                    </div>
+                    <div class = "sidebar-item" id="improvise">
+                        <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider1">
+                    </div>
+                    <div class = "sidebar-item" id="improvise">
+                        <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider2">
+                    </div>
+                    <div class = "sidebar-item" id="improvise">
+                        <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider3">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="about_text_mobile">
-          <div>
-            <br>
-            <a href = "https://www.fanlink.to/aMemoryOnFire/">MUSIC</a>
-            <br>
-            <br>
-            <a href = "img/mystery_gift.png">MYSTERY GIFT</a>
-            <br>
-            <br>
-            <a href = "https://www.twitter.com/nathanblair22/">TWITTER</a>
-            <br>
-            <br>
-            <a href = "https://www.instagram.com/nathanblair22/">INSTAGRAM</a>
-          </div>
+
+        <div id="container">
         </div>
-      </div>
+        <div id="music-masonry" class="grid">
+            <a href = "https://youtu.be/IUSehdqVz64" class = "grid-item">
+                <img class="grid-img"id="vchipIMG" src="img/superstar_logo.png">
+                <div class = "grid-item-overlay">
+                    <div class = "grid-item-text">
+                        v chip superstar<br>live at ceremony vol 2
+                    </div>
+                </div>
+            </a>
+            <a href = "https://fanlink.to/aMemoryOnFire" class = "grid-item">
+                <img class="grid-img"id="AMOFimg" src="img/AMOF_cover.png">
+                <div class = "grid-item-overlay">
+                    <div class = "grid-item-text">
+                        gltch<span style="font-family:serif; font-size:20pt;">!</span><br>a memory on fire
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id="papers-masonry" class="grid">
+            <a href = "pdfs/Analyzing_policy_distillation_on_multi-task_learning_and_meta-reinforcement_learning_in_meta-world.pdf" target="_blank" class = "grid-item">
+                <span class = helper>
+                </span><img class="grid-img" src="img/paper-thumbs/meta.png">
+                <div class = "grid-item-overlay">
+                    <div class = "paper-text" style="top:24%;">
+                        Analyzing Policy Distillation On Multi-Task Learning and Meta-Reinforcement Learning in Meta-World<br><br>UC Berkeley CS285 2019
+                    </div>
+                </div>
+            </a>
+            <a href = "pdfs/Deep_neural_networks_for_near_earth_object_classification_in_wise_data.pdf" target="_blank" class = "grid-item">
+                <span class = helper>
+                </span><img class="grid-img" src="img/paper-thumbs/comet2.png">
+                <div class = "grid-item-overlay">
+                    <div class = "paper-text" style="top:30%;">
+                        Deep Neural Networks for Near Earth Object Classification in WISE Data<br><br>NASA JPL 2019
+                    </div>
+                </div>
+            </a>
+            <a href = "pdfs/Random_embeddings_for_robust_deep_learning.pdf" target="_blank" class = "grid-item">
+                <span class = helper>
+                </span><img class="grid-img" src="img/paper-thumbs/robust.png">
+                <div class = "grid-item-overlay">
+                    <div class = "paper-text" style="top:35%;">
+                        Random Embeddings for Robust Deep Learning<br><br>UC Berkeley CS294-131 2019
+                    </div>
+                </div>
+            </a>
+            <a href = "pdfs/Encouraging_categorical_meaning_in_the_latent_space_of_a_VAE.pdf" target="_blank" class = "grid-item">
+                <span class = helper>
+                </span><img class="grid-img" src="img/paper-thumbs/cluster.png">
+                <div class = "grid-item-overlay">
+                    <div class = "paper-text" style="top:35%;">
+                        Encouraging Categorical Meaning in the Latent Space of a VAE<br><br>UC Berkeley CS280 2019
+                    </div>
+                </div>
+            </a>
+            <a href = "pdfs/the_neowise_discovered.pdf" target="_blank" class = "grid-item">
+                <span class = helper>
+                </span><img class="grid-img" src="img/paper-thumbs/comet1.png">
+                <div class = "grid-item-overlay">
+                    <div class = "paper-text" style="top:24%;">
+                        The NEOWISE-Discovered Comet Population and the CO+CO2 production rates<br><br>NASA JPL, Caltech 2015<br><br>ApJ
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div id = "store-content" class="grid">
+            <div class="coming_soon_text" style="font-family:xe-micropolis;">
+                COMING SOON<br><br>
+            </div>
+
+            <div class="coming_soon_text" style="font-family:badger-spine;">
+                COMING SOON
+            </div>
+        </div>
     </div>
-  </div>
+    
 </body>
 </html>

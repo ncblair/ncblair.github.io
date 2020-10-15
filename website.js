@@ -92,12 +92,12 @@ function draw() {
     //--visual and loop--
     clear();
     if (resizeCanv) {
-        if (true) {
+        if (sequencer_view) {
             resizeCanvas(document.getElementById("container").offsetWidth, Math.min(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight));
             resizeCanv = false;
         }
         else {
-            
+            console.log("resize but not sequencer");
         }
     }
 
@@ -141,12 +141,29 @@ function draw() {
                 if (isPlaying && position == j && grid[i][j] == 1) {
                     polySynth.play(midiToFreq(NOTES[i]) + random(document.getElementById("slider2").value/4), .2, 0, .2);
                     polySynth.play(midiToFreq(HARMS[i]) + random(document.getElementById("slider2").value/4), document.getElementById("slider1").value/500, 0, .2);
+                    
+                    
+                    
                     if (sequencer_view) {
                         var r = red(light_color);
                         var g = green(light_color);
                         var b = blue(light_color);
 
                         pixel_rect(x + off2 - width/2, y + off2 -height/2, box_w - 2*off2, box_h - 2*off2, 10, 3, light_color, 60);         
+                    }
+                    else {
+                        if (i == 0) {
+                            directionalLight(100, 100, 100, -1, 0, 0);
+                        }
+                        if (i == 1) {
+                            directionalLight(100, 100, 100, 1, 0, 0);
+                        }
+                        if (i == 2) {
+                            directionalLight(100, 100, 100, 0, -1, 0);
+                        }
+                        if (i == 3) {
+                            directionalLight(100, 100, 100, 0, 1, 0);
+                        }
                     }
 
                 }
@@ -156,13 +173,20 @@ function draw() {
             }
         }
         //--bass markov section
-        if (isPlaying && position == 0 && harmonize) {
-            curr_bassnote = random(bass_osc_markov[curr_bassnote]);
-            if ((resolve_bass % 4 == 0) && (random() > .7)) {
-                curr_bassnote = 36;
+        if (isPlaying && position < 4 && harmonize) {
+            if (position == 0) {
+                curr_bassnote = random(bass_osc_markov[curr_bassnote]);
+                if ((resolve_bass % 4 == 0) && (random() > .7)) {
+                    curr_bassnote = 36;
+                }
+                bassSynth.play(midiToFreq(curr_bassnote), .3, 0, 1);
+                resolve_bass += 1;           
             }
-            bassSynth.play(midiToFreq(curr_bassnote), .3, 0, 1);
-            resolve_bass += 1;
+            
+            if (!sequencer_view) {
+                ambientLight(random(255), random(255), random(255));
+            }
+
         }
         
         if (isPlaying) {
@@ -171,8 +195,14 @@ function draw() {
     }
     
     if (!sequencer_view) {
-        mesh.update();
-        mesh.draw();
+        if (!isPlaying) {
+            var speed = .1;
+        }
+        else {
+            var speed = .1;
+        }
+        mesh.update(speed);
+        mesh.draw(isPlaying);
     }
 }
 
@@ -199,6 +229,7 @@ function mousePressed(event) {
 function windowResized() {
     resizeCanv = true;
     textSize(height/5);
+    
 }
 
 function page_sw(page) {
@@ -321,6 +352,4 @@ function toggle_harmonizer() {
     else {
         document.getElementById("harmonizer").innerHTML = "bass";
     }
-    
-    
 }

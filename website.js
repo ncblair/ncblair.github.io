@@ -15,18 +15,20 @@ var SEQ_LEN = 8;
 var NOTES = [69, 66, 62, 55];
 var HARMS = [78,  74, 71, 62];
 var bass_osc_markov = {
-    36:[33, 38, 40], 
+    36:[38, 33, 40], 
     38:[40, 36],
     40:[33, 36],
     33:[38, 40, 36],
-    31:[40, 33, 36, 38]
+    31:[40, 33 , 38]
 };
 var resolve_bass = 0;
-var curr_bassnote = 36;
+var curr_bassnote = 31 ;
 var sequencer_view = true;
 var font;
 var resizeCanv;
 var harmonize = false;
+
+var mesh;
 
 function preload() {
     font = loadFont("type/galactic-gothic.ttf");
@@ -79,6 +81,7 @@ function setup() {
     delay.process(polySynth, .25, .5, 2500);
     delay.amp(0);
     document.getElementById("slider3").value = random(100);
+    mesh = new Mesh(8);
 }
 
 
@@ -89,7 +92,7 @@ function draw() {
     //--visual and loop--
     clear();
     if (resizeCanv) {
-        if (sequencer_view) {
+        if (true) {
             resizeCanvas(document.getElementById("container").offsetWidth, Math.min(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight));
             resizeCanv = false;
         }
@@ -166,6 +169,11 @@ function draw() {
             position = (position + 1) % SEQ_LEN;
         }
     }
+    
+    if (!sequencer_view) {
+        mesh.update();
+        mesh.draw();
+    }
 }
 
 function mousePressed(event) {
@@ -197,7 +205,8 @@ function page_sw(page) {
     console.log(current_page, page);
     var pages = ["home", "sequencer", "music", "papers", "store"];
     if (current_page == "home") {
-        console.log("leaving home");
+        document.getElementById("container").style.display = "none";
+        document.getElementById("home").style.fontWeight = "normal";
     }
     else if (current_page == "sequencer") {
         document.getElementById("container").style.display = "none";
@@ -217,12 +226,16 @@ function page_sw(page) {
     }
     current_page = page;
     if (page == "home") {
-        console.log("home");
+        document.getElementById("container").style.display = "initial";
+        document.getElementById("home").style.fontWeight = "bold";
+        windowResized();
+        sequencer_view = false;
     }
     else if (page == "sequencer") {
         document.getElementById("container").style.display = "initial";
         document.getElementById("sequencer").style.fontWeight = "bold";
         windowResized();
+        sequencer_view = true;
     }
     else if (page == "music") {
         document.getElementById("music-masonry").style.display = "initial";
@@ -301,7 +314,7 @@ function toggle_sound(e){
 function toggle_harmonizer() {
     harmonize=!harmonize;
     resolve_bass = 0;
-    curr_bassnote = 36;
+    curr_bassnote = 31;
     if (harmonize) {
         document.getElementById("harmonizer").innerHTML = "stop bass";
     }

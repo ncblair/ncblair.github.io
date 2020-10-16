@@ -11,6 +11,10 @@ var box_h;
 var light_color;
 var current_page;
 
+var recording = false;
+var recorder;
+var soundFile;
+
 var SEQ_LEN = 8;
 var NOTES = [69, 66, 62, 55];
 var HARMS = [78,  74, 71, 62];
@@ -27,6 +31,7 @@ var sequencer_view = false;
 var font;
 var resizeCanv;
 var harmonize = false;
+var queue_harm = false;
 
 var mesh;
 var fullScreen;
@@ -36,20 +41,23 @@ function preload() {
 }
 
 function setup() {
-  frameRate(4);
+    frameRate(4);
 
-  started=false;
-  current_page = "home";
-  grid = [];
-  position = 0;
-  isPlaying = false;
-  light_color = color("white");
+    started=false;
+    current_page = "home";
+    grid = [];
+    position = 0;
+    isPlaying = false;
+    light_color = color("white");
 
-  var rand1 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
-  var rand2 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
+    var rand1 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
+    var rand2 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
 
-  start_sound = loadSound("sounds/fireplace.mp3");
-  start_sound.setVolume(0.2);
+    start_sound = loadSound("sounds/fireplace.mp3");
+    start_sound.setVolume(0.2);
+    
+    recorder = new p5.SoundRecorder();
+    soundFile = new p5.SoundFile();
 
     for (var i = 0; i < NOTES.length; i++) {
         note = NOTES[i];
@@ -66,7 +74,6 @@ function setup() {
 
     var cnv = createCanvas(document.getElementById("container").offsetWidth, Math.min(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight), WEBGL);
     cnv.parent("container");
-
 
     document.body.onkeyup = function(e){toggle_sound(e)};
     
@@ -87,10 +94,32 @@ function setup() {
 
 function draw() {
     //--sound stuff--
-    delay.amp(document.getElementById("slider3").value / 100);
-    
+    var signal_delay = (document.getElementById("slider3").value - 1)/99;
+    var pitch_shift = 1 + .05946309436*(document.getElementById("slider2").value - 1)/99;
+    var harm_vel = document.getElementById("slider1").value/500;
+    delay.amp(signal_delay);
     //--visual and loop--
-    clear();
+    if (sequencer_view || !isPlaying) {
+        clear();
+    }
+    else if (!recording) {
+        //clear();
+        noStroke();
+        specularMaterial(255, 254 - signal_delay*150);
+        plane(width, height);
+    }
+    
+    //flash sidebar if recording
+    if (recording) {
+        if (position % 4 < 2) {
+            document.getElementById("sidebar").style.borderColor = "red";
+        }
+        else {
+            document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
+        }
+        
+    }
+
     if (resizeCanv) {
         if (sequencer_view) {
             resizeCanvas(document.getElementById("container").offsetWidth, Math.min(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight));
@@ -140,8 +169,8 @@ function draw() {
 
 
                 if (isPlaying && position == j && grid[i][j] == 1) {
-                    polySynth.play(midiToFreq(NOTES[i]) + random((document.getElementById("slider2").value-1)/4), .2, 0, .2);
-                    polySynth.play(midiToFreq(HARMS[i]) + random((document.getElementById("slider2").value-1)), document.getElementById("slider1").value/500, 0, .2);
+                    polySynth.play(midiToFreq(NOTES[i])*pitch_shift, .2, 0, .2);
+                    polySynth.play(midiToFreq(HARMS[i])*pitch_shift, harm_vel, 0, .2);
                     
                     
                     
@@ -174,6 +203,10 @@ function draw() {
             }
         }
         //--bass markov section
+        if (position == 0 && queue_harm) {
+            harmonize = true;
+            queue_harm = false;
+        }
         if (isPlaying && position < 4 && harmonize) {
             if (position == 0) {
                 curr_bassnote = random(bass_osc_markov[curr_bassnote]);
@@ -228,17 +261,17 @@ function mousePressed(event) {
             }
         }
         else {
-            fullScreen = !fullScreen;
-            if (fullScreen) {
-                document.getElementById("container").style.paddingLeft = "300px";
-                document.getElementById("container").style.width = "calc(90% - 300px)";
-                document.getElementById("container").style.zIndex = "3";
-            }
-            else {
-                document.getElementById("container").style.paddingLeft = "700px";
-                document.getElementById("container").style.width = "calc(95% - 700px)";
-                document.getElementById("container").style.zIndex = "0";
-            }
+//            fullScreen = !fullScreen;
+//            if (fullScreen) {
+//                document.getElementById("container").style.paddingLeft = "300px";
+//                document.getElementById("container").style.width = "calc(90% - 300px)";
+//                document.getElementById("container").style.zIndex = "3";
+//            }
+//            else {
+//                document.getElementById("container").style.paddingLeft = "700px";
+//                document.getElementById("container").style.width = "calc(95% - 700px)";
+//                document.getElementById("container").style.zIndex = "0";
+//            }
 
             resizeCanv = true;
         }
@@ -377,13 +410,51 @@ function toggle_sound(e){
 }
 
 function toggle_harmonizer() {
-    harmonize=!harmonize;
     resolve_bass = 0;
     curr_bassnote = 31;
-    if (harmonize) {
+    if (!harmonize) {
+        queue_harm = true;
         document.getElementById("harmonizer").innerHTML = "stop bass";
     }
     else {
+        harmonize=false;
+        queue_harm=false;
         document.getElementById("harmonizer").innerHTML = "bass";
+    }
+}
+
+function toggle_record() {
+    recording = !recording;
+    if (recording) {
+        document.getElementById("record").innerHTML = "cancel";
+        document.getElementById("download").innerHTML = "download";
+        document.getElementById("download").style.backgroundColor = "green";
+        recorder.record(soundFile);
+    }
+    else {
+        document.getElementById("record").innerHTML = "record audio";
+        document.getElementById("download").innerHTML = "";
+        document.getElementById("download").style.backgroundColor = "gray";
+        recorder.stop();
+        document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
+    }
+}
+
+function download() {
+    if (recording) {
+        recorder.stop();
+        try {
+          saveSound(soundFile, 'myAudio.wav');
+        }
+        catch(err) {
+          alert("Error saving file. Usually this will be resolved if you try again");
+        }
+        
+
+        recording = false;
+        document.getElementById("record").innerHTML = "record audio";
+        document.getElementById("download").innerHTML = "";
+        document.getElementById("download").style.backgroundColor = "gray";
+        document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
     }
 }

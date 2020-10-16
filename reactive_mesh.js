@@ -18,9 +18,6 @@ class Mesh {
     }
     
     draw(isPlaying) {
-//        if (do_ortho) {
-//            ortho(-width/2, width/2, -height/2, height/2, 0, 5000);
-//        }
         pointLight(100, 100, 100, 0, 0, 0);
         for (var i = 0; i < this.nodes.length; i++) {
             this.nodes[i].draw();

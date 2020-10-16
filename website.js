@@ -23,12 +23,13 @@ var bass_osc_markov = {
 };
 var resolve_bass = 0;
 var curr_bassnote = 31 ;
-var sequencer_view = true;
+var sequencer_view = false;
 var font;
 var resizeCanv;
 var harmonize = false;
 
 var mesh;
+var fullScreen;
 
 function preload() {
     font = loadFont("type/galactic-gothic.ttf");
@@ -38,7 +39,7 @@ function setup() {
   frameRate(4);
 
   started=false;
-  current_page = "sequencer";
+  current_page = "home";
   grid = [];
   position = 0;
   isPlaying = false;
@@ -64,7 +65,6 @@ function setup() {
     }
 
     var cnv = createCanvas(document.getElementById("container").offsetWidth, Math.min(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight), WEBGL);
-    console.log(width);
     cnv.parent("container");
 
 
@@ -97,7 +97,8 @@ function draw() {
             resizeCanv = false;
         }
         else {
-            console.log("resize but not sequencer");
+            resizeCanvas(document.getElementById("container").offsetWidth, Math.min(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight));
+            resizeCanv = false;
         }
     }
 
@@ -139,8 +140,8 @@ function draw() {
 
 
                 if (isPlaying && position == j && grid[i][j] == 1) {
-                    polySynth.play(midiToFreq(NOTES[i]) + random(document.getElementById("slider2").value/4), .2, 0, .2);
-                    polySynth.play(midiToFreq(HARMS[i]) + random(document.getElementById("slider2").value/4), document.getElementById("slider1").value/500, 0, .2);
+                    polySynth.play(midiToFreq(NOTES[i]) + random((document.getElementById("slider2").value-1)/4), .2, 0, .2);
+                    polySynth.play(midiToFreq(HARMS[i]) + random((document.getElementById("slider2").value-1)), document.getElementById("slider1").value/500, 0, .2);
                     
                     
                     
@@ -201,28 +202,47 @@ function draw() {
         else {
             var speed = .1;
         }
+        if (fullScreen) {
+            camera(0, 0, -1, 0, 0, -2, 0, 1, 0);
+            background(0);
+        }
         mesh.update(speed);
         mesh.draw(isPlaying);
     }
 }
 
 function mousePressed(event) {
-  if (event.srcElement === document.getElementById("defaultCanvas0")) {
-    const tmx = event.offsetX * width / canvas.clientWidth;
-    const tmy = event.offsetY * height / canvas.clientHeight;
-    for (var i = 0; i < NOTES.length; i++) {
-      for (var j = 0; j < SEQ_LEN; j++) {
-
-        x = j*box_w;
-        y = i*box_h;
-        if (tmx > x && tmx < x + box_w && tmy > y && tmy < y + box_h) {
-          // in the box
-          grid[i][j] = 1 - grid[i][j];
+    if (event.srcElement === document.getElementById("defaultCanvas0")) {
+        if (sequencer_view) {
+            const tmx = event.offsetX * width / canvas.clientWidth;
+            const tmy = event.offsetY * height / canvas.clientHeight;
+            for (var i = 0; i < NOTES.length; i++) {
+                for (var j = 0; j < SEQ_LEN; j++) {
+                    x = j*box_w;
+                    y = i*box_h;
+                    if (tmx > x && tmx < x + box_w && tmy > y && tmy < y + box_h) {
+                        // in the box
+                        grid[i][j] = 1 - grid[i][j];
+                    }
+                }
+            }
         }
-      }
+        else {
+            fullScreen = !fullScreen;
+            if (fullScreen) {
+                document.getElementById("container").style.paddingLeft = "300px";
+                document.getElementById("container").style.width = "calc(90% - 300px)";
+                document.getElementById("container").style.zIndex = "3";
+            }
+            else {
+                document.getElementById("container").style.paddingLeft = "700px";
+                document.getElementById("container").style.width = "calc(95% - 700px)";
+                document.getElementById("container").style.zIndex = "0";
+            }
+
+            resizeCanv = true;
+        }
     }
-    console.log(grid);
-  }
 }
 
 
@@ -237,6 +257,7 @@ function page_sw(page) {
     var pages = ["home", "sequencer", "music", "papers", "store"];
     if (current_page == "home") {
         document.getElementById("container").style.display = "none";
+        document.getElementById("about-container").style.display = "none";
         document.getElementById("home").style.fontWeight = "normal";
     }
     else if (current_page == "sequencer") {
@@ -258,23 +279,33 @@ function page_sw(page) {
     current_page = page;
     if (page == "home") {
         document.getElementById("container").style.display = "initial";
+        document.getElementById("container").style.paddingLeft = "700px";
+        document.getElementById("container").style.width = "calc(95% - 700px)";     
+        document.getElementById("about-container").style.display = "initial";
         document.getElementById("home").style.fontWeight = "bold";
+        document.getElementById("sequencer").style.cursor = "pointer";
         windowResized();
         sequencer_view = false;
+        fullScreen = false;
     }
     else if (page == "sequencer") {
         document.getElementById("container").style.display = "initial";
+        document.getElementById("container").style.paddingLeft = "300px";
+        document.getElementById("container").style.width = "calc(90% - 300px)";
         document.getElementById("sequencer").style.fontWeight = "bold";
+        document.getElementById("sequencer").style.cursor = "auto";
         windowResized();
         sequencer_view = true;
     }
     else if (page == "music") {
         document.getElementById("music-masonry").style.display = "initial";
         document.getElementById("music").style.fontWeight = "bold";
+        mason($('.grid'));
     }
     else if (page == "papers") {
         document.getElementById("papers-masonry").style.display = "initial";
         document.getElementById("papers").style.fontWeight = "bold";
+        mason($('.grid'));
     }
     else if (page == "store") {
         document.getElementById("store-content").style.display = "initial";
@@ -301,20 +332,23 @@ function vh(v) {
   var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   return (v * h) / 100;
 }
-
-//masonry
-var grid = document.querySelector('.grid');
-var msnry = new Masonry( grid, {
-  // options...
-    itemSelector: '.grid-item',
-    columnWidth: 200,
-    isAnimated: true,
-    animationOptions: {
-        duration: 1000,
-        easing: 'linear',
-        queue: false
-    }
+$( document ).ready(function() {
+    mason($('.grid'));
 });
+
+function mason(selector) {
+    selector.masonry({
+        // options
+        itemSelector: '.grid-item',
+        columnWidth: 200, 
+        isAnimated: true,
+        animationOptions: {
+            duration: 600,
+            easing: 'linear',
+            queue: false
+        }
+    });
+}
 
 function setGradient(c1, c2) {
   // noprotect

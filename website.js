@@ -10,6 +10,8 @@ var box_w;
 var box_h;
 var light_color;
 var current_page;
+var header_texts = document.getElementsByClassName("header-item");
+var grids = document.getElementsByClassName("grid");
 
 var recording = false;
 var recorder;
@@ -89,6 +91,7 @@ function setup() {
     delay.amp(0);
     document.getElementById("slider3").value = random(100);
     mesh = new Mesh(8);
+    windowResized();
 }
 
 
@@ -260,21 +263,6 @@ function mousePressed(event) {
                 }
             }
         }
-        else {
-//            fullScreen = !fullScreen;
-//            if (fullScreen) {
-//                document.getElementById("container").style.paddingLeft = "300px";
-//                document.getElementById("container").style.width = "calc(90% - 300px)";
-//                document.getElementById("container").style.zIndex = "3";
-//            }
-//            else {
-//                document.getElementById("container").style.paddingLeft = "700px";
-//                document.getElementById("container").style.width = "calc(95% - 700px)";
-//                document.getElementById("container").style.zIndex = "0";
-//            }
-
-            resizeCanv = true;
-        }
     }
 }
 
@@ -282,7 +270,54 @@ function mousePressed(event) {
 function windowResized() {
     resizeCanv = true;
     textSize(height/5);
+    var rightmargin = 240 - Math.min(240, Math.max(1077- window.innerWidth, 0));
+    if (current_page=="sequencer") {
+        var leftmargin = 300 - Math.min(300, Math.max(837- window.innerWidth, 0));
+    }
+    else {
+        var leftmargin = 260 - Math.min(260, Math.max(837- window.innerWidth, 0));
+    }
+    var fontsize = 40 - max(0, 21 - leftmargin*.08);
+    console.log(leftmargin);
+    fontsize = [40, 35, 30, 25, 22, 19].reduce(function(prev, curr) {
+        return (Math.abs(curr - fontsize) < Math.abs(prev - fontsize) ? curr : prev);
+    });
+    var titlespace = 100 + 140*(fontsize - 19)/21;
     
+    if (rightmargin == 0) {
+        var gridwidth = "100%";
+        if (leftmargin > 0) {
+            rightmargin = leftmargin / 2;
+            leftmargin = leftmargin / 2;
+        }
+        document.getElementById("sidebar-outer").style.display = "none";
+    }
+    else  {
+        document.getElementById("sidebar-outer").style.display = "initial";
+        var gridwidth = "calc(100 - 260px)";
+    }
+    
+    for (var i = 0; i < header_texts.length; i++) {
+        header_texts[i].style.fontSize = String(fontsize).concat("pt");
+        header_texts[i].style.width = "calc(25vw - ".concat(String(titlespace/header_texts.length), "px)");
+    }
+    document.getElementById("title").style.fontSize = String(fontsize).concat("pt");
+    document.getElementById("title").style.width = String(titlespace).concat("px");
+    document.getElementById("header-links").style.width = "calc(100%-".concat(String(titlespace), "px)");
+    
+    
+    document.getElementById("container").style.marginLeft = String(leftmargin).concat("px");
+    document.getElementById("about-container").style.marginLeft = String(leftmargin).concat("px");
+    document.getElementById("container").style.width = "calc(100% - ".concat(String(leftmargin), "px - ", String(rightmargin), "px)");  
+    document.getElementById("about-container").style.width ="calc(100% - ".concat(String(leftmargin), "px - ", String(rightmargin), "px)");
+    
+    document.getElementById("about-text").style.fontSize = String(10 + 4*(fontsize - 19)/21).concat("pt");
+    
+    mesh.update_nodesize(15 + 10*(fontsize - 19)/21);
+    
+    for (var i = 0; i < grids.length; i++) {
+        grids[i].style.width = gridwidth;
+    }
 }
 
 function page_sw(page) {
@@ -312,9 +347,7 @@ function page_sw(page) {
     current_page = page;
     if (page == "home") {
         document.getElementById("container").style.display = "initial";
-        document.getElementById("container").style.paddingLeft = "700px";
-        document.getElementById("container").style.width = "calc(95% - 700px)";     
-        document.getElementById("about-container").style.display = "initial";
+        document.getElementById("about-container").style.display = "table";
         document.getElementById("home").style.fontWeight = "bold";
         document.getElementById("sequencer").style.cursor = "pointer";
         windowResized();
@@ -323,8 +356,6 @@ function page_sw(page) {
     }
     else if (page == "sequencer") {
         document.getElementById("container").style.display = "initial";
-        document.getElementById("container").style.paddingLeft = "300px";
-        document.getElementById("container").style.width = "calc(90% - 300px)";
         document.getElementById("sequencer").style.fontWeight = "bold";
         document.getElementById("sequencer").style.cursor = "auto";
         windowResized();
@@ -373,7 +404,7 @@ function mason(selector) {
     selector.masonry({
         // options
         itemSelector: '.grid-item',
-        columnWidth: 200, 
+        columnWidth: 0, 
         isAnimated: true,
         animationOptions: {
             duration: 600,

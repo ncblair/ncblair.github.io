@@ -30,7 +30,6 @@ class Node {
             //update goal
             this.path_position = (this.path_position + 1) % this.path.length;
             this.dir = (this.dir + 1) % 3;
-            this.step(speed);
         }
     }
     

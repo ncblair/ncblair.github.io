@@ -12,6 +12,7 @@ var light_color;
 var current_page;
 var header_texts = document.getElementsByClassName("header-item");
 var grids = document.getElementsByClassName("grid");
+var sidebar_texts = document.getElementsByClassName("sidebar-item-text");
 
 var recording = false;
 var recorder;
@@ -277,7 +278,7 @@ function windowResized() {
     else {
         var leftmargin = 260 - Math.min(260, Math.max(837- window.innerWidth, 0));
     }
-    var fontsize = 40 - max(0, 21 - leftmargin*.08);
+    var fontsize = 40 - max(0, 21 - leftmargin*21 / 260);
     console.log(leftmargin);
     fontsize = [40, 35, 30, 25, 22, 19].reduce(function(prev, curr) {
         return (Math.abs(curr - fontsize) < Math.abs(prev - fontsize) ? curr : prev);
@@ -290,17 +291,35 @@ function windowResized() {
             rightmargin = leftmargin / 2;
             leftmargin = leftmargin / 2;
         }
-        document.getElementById("sidebar-outer").style.display = "none";
+        document.getElementById("sidebar-outer").classList.remove("leftbar");
+        document.getElementById("sidebar-outer").classList.add("bottombar");
+        document.getElementById("sidebar-parent").style.height = "115px";
+        document.getElementById("sidebar-outer").style.height = "115";
+        document.getElementById("sidebar-footer").style.display = "none";
     }
     else  {
-        document.getElementById("sidebar-outer").style.display = "initial";
+        document.getElementById("sidebar-outer").classList.add("leftbar");
+        document.getElementById("sidebar-outer").classList.remove("bottombar");
+        document.getElementById("sidebar-parent").style.height = "100%";
         var gridwidth = "calc(100 - 260px)";
+        document.getElementById("sidebar-footer").style.display = "initial";
     }
     
     for (var i = 0; i < header_texts.length; i++) {
         header_texts[i].style.fontSize = String(fontsize).concat("pt");
         header_texts[i].style.width = "calc(25vw - ".concat(String(titlespace/header_texts.length), "px)");
     }
+    
+    for (var i = 0; i < sidebar_texts.length; i++) {
+        sidebar_texts[i].style.fontSize = String(8 + 5*(fontsize - 19)/21).concat("pt");
+        sidebar_texts[i].style.width = String(98 + 100*(fontsize - 19)/21).concat("px");
+    }
+    
+    if (window.innerWidth < 465) {
+        document.getElementById("sidebar-parent").style.height = "170px";
+        document.getElementById("sidebar-outer").style.height = "170px";
+    }
+    
     document.getElementById("title").style.fontSize = String(fontsize).concat("pt");
     document.getElementById("title").style.width = String(titlespace).concat("px");
     document.getElementById("header-links").style.width = "calc(100%-".concat(String(titlespace), "px)");
@@ -311,7 +330,7 @@ function windowResized() {
     document.getElementById("container").style.width = "calc(100% - ".concat(String(leftmargin), "px - ", String(rightmargin), "px)");  
     document.getElementById("about-container").style.width ="calc(100% - ".concat(String(leftmargin), "px - ", String(rightmargin), "px)");
     
-    document.getElementById("about-text").style.fontSize = String(10 + 4*(fontsize - 19)/21).concat("pt");
+    document.getElementById("about-text").style.fontSize = String(8 + 4*(fontsize - 19)/21).concat("pt");
     
     mesh.update_nodesize(15 + 10*(fontsize - 19)/21);
     
@@ -457,35 +476,20 @@ function toggle_harmonizer() {
 function toggle_record() {
     recording = !recording;
     if (recording) {
-        document.getElementById("record").innerHTML = "cancel";
-        document.getElementById("download").innerHTML = "download";
-        document.getElementById("download").style.backgroundColor = "green";
+        document.getElementById("record").innerHTML = "stop";
         recorder.record(soundFile);
     }
     else {
         document.getElementById("record").innerHTML = "record audio";
-        document.getElementById("download").innerHTML = "";
-        document.getElementById("download").style.backgroundColor = "gray";
         recorder.stop();
         document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
-    }
-}
-
-function download() {
-    if (recording) {
-        recorder.stop();
-        try {
-          saveSound(soundFile, 'myAudio.wav');
+        if (confirm('would you like to download the audio you recorded?')) {
+            try {
+                saveSound(soundFile, 'myAudio.wav');
+            }
+            catch(err) {
+                alert("error saving file. this is a known bug that is usually resolved by trying again");
+            }
         }
-        catch(err) {
-          alert("Error saving file. Usually this will be resolved if you try again");
-        }
-        
-
-        recording = false;
-        document.getElementById("record").innerHTML = "record audio";
-        document.getElementById("download").innerHTML = "";
-        document.getElementById("download").style.backgroundColor = "gray";
-        document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
     }
 }

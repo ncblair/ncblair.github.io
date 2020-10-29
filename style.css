@@ -101,6 +101,14 @@ a {
 	letter-spacing: 0px;
 }
 
+@font-face {
+    font-family:oxygen-mono;
+    src:url(type/Oxygen_Mono/OxygenMono_Regular.ttf);
+    -webkit-font-smoothing: antialiased;
+	letter-spacing: 0px;
+}
+
+
 /*------------------------------------------*/
 
 #header {
@@ -199,7 +207,7 @@ a {
 
 #sidebar{
     position:fixed;;
-	width: 220px;
+	width: calc(100% - 20px);
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -209,30 +217,79 @@ a {
     flex-direction: row;
 	position: relative;
     margin:10px;
-    border:1px solid rgba(220, 220, 220, .95);
+/*    border:1px solid rgba(220, 220, 220, .95);*/
     
     height: calc(100% - 20px);
-    min-height:415px;
-    background-image: linear-gradient(rgb(150, 150, 150), rgb(70, 70, 70));
+/*    background-image: linear-gradient(rgb(150, 150, 150), rgb(70, 70, 70));*/
+    background-color:black;
     overflow:hidden;
+    
+    
+}
+
+#sidebar-parent {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: start;
+    -moz-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-align-content: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    width:100%;
+    height:100%;
     
 }
 
 #sidebar-outer{
     z-index:4;
-    position:fixed;
 	/*height: 100vh;*/
 	/*display: none;*/
-	width: 240px;
-	position: relative;
-    margin-top: calc(13vh + 5% - 4px);
-    margin-left:20px;
-    
-    height: calc(87% - 13vh);
-    background-image: linear-gradient(rgb(150, 150, 150), rgb(70, 70, 70));
+	
+/*    background-image: linear-gradient(rgb(150, 150, 150), rgb(70, 70, 70));*/
+    background-color:black;
     border-top-right-radius:10px;
     border-bottom-left-radius:10px;
+    
+    border:1px solid rgba(220, 220, 220, .95);
+    
+}
+
+.leftbar {
+    position: relative;
+    margin-top: calc(13vh + 5% - 4px);
+    margin-left:20px;
+    height: calc(87% - 13vh);
+    width: 240px;
     min-height:435px;
+}
+
+.bottombar {
+    position:absolute;
+    bottom:10px;
+    margin-left:10%;
+    height: 115px;
+    width: 80%;
 }
 
 
@@ -241,22 +298,25 @@ a {
 	display: -ms-flexbox;
 	display: flex;
 	-webkit-box-pack: start;
-	    -ms-flex-pack: start;
-	        justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
 	-webkit-box-align: center;
-	    -ms-flex-align: center;
-	        align-items: center;
-	height: 10%;
-	width: 100%;
+	-ms-flex-align: center;
+	align-items: center;
 	text-align: center;
 	margin: 20px 0px;
+    height:5%
+        
 }
 .sidebar-item-text{
     width: 198px;
     margin-left:10px;
     text-align: center;
     font-family:monospace;
-    font-size:16pt;
+    cursor:pointer;
+    color:white;
+    background-color:black;
+    font-size:13pt;
 }
 
 #sidebar-footer{
@@ -264,7 +324,7 @@ a {
     margin-left:10px;
     text-align: center;
     font-family:monospace;
-    font-size:12pt;
+    font-size:10pt;
     color:gray;
     position:absolute;
     bottom:10px;
@@ -280,54 +340,61 @@ a {
     -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
     background: transparent; /* Otherwise white in Chrome */
     background: #d3d3d3; /* Grey background */
-    border-radius:10px;
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    border-radius:1px;
+    opacity: 0.9; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
     outline: none;
-    height:10px;
+    height:1px;
+    cursor: pointer;
 }
 
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
     appearance: none;
-    width: 25px; /* Set a specific slider handle width */
-    height: 25px; /* Slider handle height */
+    width: 15px; /* Set a specific slider handle width */
+    height: 15px; /* Slider handle height */
+    border-radius:8.5px;
+    background-image: linear-gradient(rgb(255, 255, 255), rgb(100, 100, 100));
 }
 
 .slider::-moz-range-thumb {
-  width: 25px; /* Set a specific slider handle width */
-  height: 25px; /* Slider handle height */
-  cursor: pointer; /* Cursor on hover */
+    width: 15px; /* Set a specific slider handle width */
+    height: 15px; /* Slider handle height */
+    
+    border-radius:8.5px;
+    background-image: linear-gradient(rgb(255, 255, 255), rgb(100, 100, 100));
 }
 
+/*
 #slider0::-webkit-slider-thumb {
-    background: #4CAF50; /* Green background */
+    background: #4CAF50; 
 }
 #slider0::-moz-range-thumb  {
-    background: #4CAF50; /* Green background */
+    background: #4CAF50; 
 }
 
 #slider1::-webkit-slider-thumb {
-    background: #9624BB; /* Green background */
+    background: #9624BB; 
 }
 #slider1::-moz-range-thumb  {
-    background: #9624BB; /* Green background */
+    background: #9624BB; 
 }
 
 #slider2::-webkit-slider-thumb {
-    background: #122FC9; /* Green background */
+    background: #122FC9; 
 }
 #slider2::-moz-range-thumb  {
-    background: #122FC9; /* Green background */
+    background: #122FC9; 
 }
 
 #slider3::-webkit-slider-thumb {
-    background: #C21413; /* Green background */
+    background: #C21413; 
 }
 #slider3::-moz-range-thumb  {
-    background: #C21413; /* Green background */
+    background: #C21413; 
 }
+*/
 
 /*------------------------------------------*/
 

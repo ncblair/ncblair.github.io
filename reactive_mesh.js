@@ -23,6 +23,7 @@ class Mesh {
     
     draw(isPlaying) {
         pointLight(100, 100, 100, 0, 0, 0);
+        strokeWeight(2)
         for (var i = 0; i < this.nodes.length; i++) {
             this.nodes[i].draw();
             if (true) {

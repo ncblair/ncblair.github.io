@@ -22,7 +22,7 @@
     <div id="header">
 		<div id="title"><a href="#" onclick="page_sw('home')" id="home">nathan blair</a></div>
 		<ul id="header-links">
-			<a id="sequencer" onclick="page_sw('sequencer')" href="#">
+			<a id="sequencer" href="#" onclick="page_sw('sequencer')">
 				<li class="header-item" style="">
 					<div class="header-item-text">sequencer</div>
 				</li>
@@ -39,7 +39,7 @@
 			</a>
 			<a id="store" onclick="page_sw('store')" href="#">
 				<li class="header-item" style="">
-					<div class="header-item-text">store</div>
+					<div class="header-item-text">links</div>
 				</li>
 			</a>
 		</ul>
@@ -62,7 +62,7 @@
                         <input type="range" min="1" max="100" value="0" class="slider sidebar-item-text" id="slider3">
                     </div>
                     <div class = "sidebar-item" style="border-left:20px;border-right:20px solid rgba(0, 0, 0, 0);">
-                        <button class="sidebar-item-text" onclick="toggle_harmonizer();" id="harmonizer">bass</button>
+                        <button class="sidebar-item-text" onclick="toggle_harmonizer();" id="harmonizer">color</button>
                     </div>
                     <div class = "sidebar-item" style="border-left:20px;border-right:20px solid rgba(0, 0, 0, 0);">
                         <button class="sidebar-item-text" onclick="toggle_record();" id="record">record</button>
@@ -96,7 +96,7 @@
         <div id="container">
         </div>
         <div id="music-masonry" class="grid">
-            <a href = "https://youtu.be/IUSehdqVz64" class = "grid-item">
+            <a href = "https://youtu.be/IUSehdqVz64" class = "grid-item" target="_blank">
                 <img class="grid-img"id="vchipIMG" src="img/superstar_logo.png">
                 <div class = "grid-item-overlay">
                     <div class = "grid-item-text">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </a>
-            <a href = "https://fanlink.to/aMemoryOnFire" class = "grid-item">
+            <a href = "https://fanlink.to/aMemoryOnFire" class = "grid-item" target="_blank">
                 <img class="grid-img"id="AMOFimg" src="img/AMOF_cover.png">
                 <div class = "grid-item-overlay">
                     <div class = "grid-item-text">
@@ -116,57 +116,74 @@
         <div id="papers-masonry" class="grid">
             <a href = "pdfs/Analyzing_policy_distillation_on_multi-task_learning_and_meta-reinforcement_learning_in_meta-world.pdf" target="_blank" class = "grid-item">
                 <span class = helper>
-                </span><img class="grid-img" src="img/paper-thumbs/meta.png">
+                </span><img class="grid-img" src="img/paper-thumbs/EDM-003.png">
                 <div class = "grid-item-overlay">
                     <div class = "paper-text" style="top:24%;">
-                        Analyzing Policy Distillation On Multi-Task Learning and Meta-Reinforcement Learning in Meta-World<br><br>UC Berkeley CS285 2019
+                        analyzing policy distillation on multi-task learning and meta-reinforcement learning in meta-world<br><br>uc berkeley cs285 2019
                     </div>
                 </div>
             </a>
             <a href = "pdfs/Deep_neural_networks_for_near_earth_object_classification_in_wise_data.pdf" target="_blank" class = "grid-item">
                 <span class = helper>
-                </span><img class="grid-img" src="img/paper-thumbs/comet2.png">
+                </span><img class="grid-img" src="img/paper-thumbs/EDM-DYNAMITE.png">
                 <div class = "grid-item-overlay">
                     <div class = "paper-text" style="top:30%;">
-                        Deep Neural Networks for Near Earth Object Classification in WISE Data<br><br>NASA JPL 2019
+                        deep neural networks for near earth object classification in wise data<br><br>nasa jpl 2019
                     </div>
                 </div>
             </a>
             <a href = "pdfs/Random_embeddings_for_robust_deep_learning.pdf" target="_blank" class = "grid-item">
                 <span class = helper>
-                </span><img class="grid-img" src="img/paper-thumbs/robust.png">
+                </span><img class="grid-img" src="img/paper-thumbs/EDM-GOBLIN.png">
                 <div class = "grid-item-overlay">
                     <div class = "paper-text" style="top:35%;">
-                        Random Embeddings for Robust Deep Learning<br><br>UC Berkeley CS294-131 2019
+                        random embeddings for robust deep learning<br><br>uc berkeley cs294-131 2019
                     </div>
                 </div>
             </a>
             <a href = "pdfs/Encouraging_categorical_meaning_in_the_latent_space_of_a_VAE.pdf" target="_blank" class = "grid-item">
                 <span class = helper>
-                </span><img class="grid-img" src="img/paper-thumbs/cluster.png">
+                </span><img class="grid-img" src="img/paper-thumbs/TV2K.png">
                 <div class = "grid-item-overlay">
                     <div class = "paper-text" style="top:35%;">
-                        Encouraging Categorical Meaning in the Latent Space of a VAE<br><br>UC Berkeley CS280 2019
+                        encouraging categorical meaning in the latent space of a vae<br><br>uc berkeley cs280 2019
                     </div>
                 </div>
             </a>
             <a href = "pdfs/the_neowise_discovered.pdf" target="_blank" class = "grid-item">
                 <span class = helper>
-                </span><img class="grid-img" src="img/paper-thumbs/comet1.png">
+                </span><img class="grid-img" src="img/paper-thumbs/ULTRABOY-HOLO.png">
                 <div class = "grid-item-overlay">
                     <div class = "paper-text" style="top:24%;">
-                        The NEOWISE-Discovered Comet Population and the CO+CO2 production rates<br><br>NASA JPL, Caltech 2015<br><br>ApJ
+                        the neowise-discovered comet population and the co+co2 production rates<br><br>nasa jpl, caltech 2015<br><br>apj
                     </div>
                 </div>
             </a>
         </div>
-        <div id = "store-content" class="grid">
+        <div id = "store-content">
             <div class="coming_soon_text" style="font-family:xe-micropolis;">
                 COMING SOON<br><br>
             </div>
             <div class="coming_soon_text" style="font-family:monospace; font-size:16pt;">
+                <div class="row">
+                    <div class="column">
+                        <a href="https://gltchmusic.bandcamp.com/album/a-memory-on-fire" style="text-decoration:underline;" target="_blank">bandcamp</a><br><br>
+                        <a href="https://twitter.com/nthnblair" style="text-decoration:underline;" target="_blank">twitter</a><br><br>
+                        <a href="https://music.apple.com/us/artist/gltch/1511124497" style="text-decoration:underline;" target="_blank">apple music</a><br><br>
+                        <a href="https://app.matter.online/@nathanblair" style="text-decoration:underline;" target="_blank">matter</a>
+
+                    </div>
+                    <div class="column">
+                        <a href="https://open.spotify.com/artist/3QSXsrzg0KdDJ3CN6M8rOG?si=8BpSEIKETtO4KkaMr7KfOw" style="text-decoration:underline;" target="_blank">spotify</a><br><br>
+                        <a href="https://instagram.com/nthnblair" style="text-decoration:underline;" target="_blank">instagram</a><br><br>
+                        <a href="https://audius.co/nathan" style="text-decoration:underline;" target="_blank">audius</a><br><br>
+
+                    </div>
+                </div>
+<!--
                 some merch hopefully coming soon.<br><br><br>
                 for now, you can support me on my <a href="https://gltchmusic.bandcamp.com/album/a-memory-on-fire" style="text-decoration:underline;" target="_blank">bandcamp</a>
+-->
             </div>
         </div>
     </div>

@@ -197,10 +197,10 @@ a {
 }
 
 .header-item-text:hover {
-    font-weight:bold;
+    opacity:.8;
 }
-#title>a:hover {
-    font-weight:bold;
+#title > a:hover {
+    opacity:.8;
 }
 
 /*------------------------------------------*/
@@ -277,7 +277,7 @@ a {
 
 .leftbar {
     position: relative;
-    margin-top: calc(13vh + 5% - 4px);
+    margin-top: calc(13vh + 5% + 10px);
     margin-left:20px;
     height: calc(87% - 13vh);
     width: 240px;
@@ -285,7 +285,7 @@ a {
 }
 
 .bottombar {
-    position:absolute;
+    position:fixed;
     bottom:10px;
     margin-left:10%;
     height: 115px;
@@ -430,6 +430,7 @@ a {
     display:none;
     padding-top:calc(13vh + 5%);
     width:calc(100% - 260px);
+    padding-bottom:115px;
 }
 
 #store-content {
@@ -438,6 +439,19 @@ a {
     text-align:center;
     width: calc(90% - 300px);
     height: calc(87% - 13vh);
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 .coming_soon_text {

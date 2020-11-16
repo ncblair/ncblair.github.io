@@ -147,12 +147,17 @@ function draw() {
     if (started) {
         if (sequencer_view) {
             strokeWeight(1);
+            if (harmonize && position < 4) {
+                var strokecolor = color(random(255), random(255), random(255));
+            }
+            else {
+                var strokecolor = color(255);
+            }
         }
         box_w = width / SEQ_LEN;
-         box_h = height / NOTES.length;
+        box_h = height / NOTES.length;
         var off = 10;
         var off2 = 15;
-
         for (var i = 0; i < NOTES.length; i++) {
             for (var j = 0; j < SEQ_LEN; j++) {
                 x = j*box_w;
@@ -163,7 +168,8 @@ function draw() {
                         pixel_rect(x - width/2, height/2 -10, box_w, 10, 10, 5, light_color, 60);
                     }
                     fill(0);
-                    stroke(255);
+                    stroke(strokecolor);
+
                     //erase();
                     rect(x + off - width/2, y + off - height/2, box_w - 2*off, box_h - 2*off);
 
@@ -264,6 +270,10 @@ function mousePressed(event) {
                 }
             }
         }
+        
+        if (!started) {
+            toggle_sound(32);
+        }
     }
 }
 
@@ -279,7 +289,6 @@ function windowResized() {
         var leftmargin = 260 - Math.min(260, Math.max(837- window.innerWidth, 0));
     }
     var fontsize = 40 - max(0, 21 - leftmargin*21 / 260);
-    console.log(leftmargin);
     fontsize = [40, 35, 30, 25, 22, 19].reduce(function(prev, curr) {
         return (Math.abs(curr - fontsize) < Math.abs(prev - fontsize) ? curr : prev);
     });
@@ -294,8 +303,9 @@ function windowResized() {
         document.getElementById("sidebar-outer").classList.remove("leftbar");
         document.getElementById("sidebar-outer").classList.add("bottombar");
         document.getElementById("sidebar-parent").style.height = "115px";
-        document.getElementById("sidebar-outer").style.height = "115";
+//        document.getElementById("sidebar-outer").style.height = "115";
         document.getElementById("sidebar-footer").style.display = "none";
+        document.getElementById("store-content").style.width = "100%";
     }
     else  {
         document.getElementById("sidebar-outer").classList.add("leftbar");
@@ -303,6 +313,7 @@ function windowResized() {
         document.getElementById("sidebar-parent").style.height = "100%";
         var gridwidth = "calc(100 - 260px)";
         document.getElementById("sidebar-footer").style.display = "initial";
+        document.getElementById("store-content").style.width = "calc(90% - 300px)";
     }
     
     for (var i = 0; i < header_texts.length; i++) {
@@ -330,7 +341,7 @@ function windowResized() {
     document.getElementById("container").style.width = "calc(100% - ".concat(String(leftmargin), "px - ", String(rightmargin), "px)");  
     document.getElementById("about-container").style.width ="calc(100% - ".concat(String(leftmargin), "px - ", String(rightmargin), "px)");
     
-    document.getElementById("about-text").style.fontSize = String(8 + 4*(fontsize - 19)/21).concat("pt");
+    document.getElementById("about-text").style.fontSize = String(8 + 6*(fontsize - 19)/21).concat("pt");
     
     mesh.update_nodesize(15 + 10*(fontsize - 19)/21);
     
@@ -345,54 +356,52 @@ function page_sw(page) {
     if (current_page == "home") {
         document.getElementById("container").style.display = "none";
         document.getElementById("about-container").style.display = "none";
-        document.getElementById("home").style.fontWeight = "normal";
+        document.getElementById("home").style.opacity = "1.0";
     }
     else if (current_page == "sequencer") {
         document.getElementById("container").style.display = "none";
-        document.getElementById("sequencer").style.fontWeight = "normal";
+        document.getElementById("sequencer").style.opacity = "1.0";
     }
     else if (current_page == "music") {
         document.getElementById("music-masonry").style.display = "none";
-        document.getElementById("music").style.fontWeight = "normal";
+        document.getElementById("music").style.opacity = "1.0";
     }
     else if (current_page == "papers") {
         document.getElementById("papers-masonry").style.display = "none";
-        document.getElementById("papers").style.fontWeight = "normal";
+        document.getElementById("papers").style.opacity = "1.0";
     }
     else if (current_page == "store") {
         document.getElementById("store-content").style.display = "none";
-        document.getElementById("store").style.fontWeight = "normal";
+        document.getElementById("store").style.opacity = "1.0";
     }
     current_page = page;
     if (page == "home") {
         document.getElementById("container").style.display = "initial";
         document.getElementById("about-container").style.display = "table";
-        document.getElementById("home").style.fontWeight = "bold";
-        document.getElementById("sequencer").style.cursor = "pointer";
+        document.getElementById("home").style.opacity = "0.8";
         windowResized();
         sequencer_view = false;
         fullScreen = false;
     }
     else if (page == "sequencer") {
         document.getElementById("container").style.display = "initial";
-        document.getElementById("sequencer").style.fontWeight = "bold";
-        document.getElementById("sequencer").style.cursor = "auto";
+        document.getElementById("sequencer").style.opacity = "0.8";
         windowResized();
         sequencer_view = true;
     }
     else if (page == "music") {
         document.getElementById("music-masonry").style.display = "initial";
-        document.getElementById("music").style.fontWeight = "bold";
+        document.getElementById("music").style.opacity = "0.8";
         mason($('.grid'));
     }
     else if (page == "papers") {
         document.getElementById("papers-masonry").style.display = "initial";
-        document.getElementById("papers").style.fontWeight = "bold";
+        document.getElementById("papers").style.opacity = "0.8";
         mason($('.grid'));
     }
     else if (page == "store") {
         document.getElementById("store-content").style.display = "initial";
-        document.getElementById("store").style.fontWeight = "bold";
+        document.getElementById("store").style.opacity = "0.8";
     }
     
 }
@@ -462,14 +471,14 @@ function toggle_sound(e){
 function toggle_harmonizer() {
     resolve_bass = 0;
     curr_bassnote = 31;
-    if (!harmonize) {
-        queue_harm = true;
-        document.getElementById("harmonizer").innerHTML = "stop bass";
-    }
-    else {
+    if (harmonize || queue_harm) {
         harmonize=false;
         queue_harm=false;
-        document.getElementById("harmonizer").innerHTML = "bass";
+        document.getElementById("harmonizer").innerHTML = "color";
+    }
+    else {
+        queue_harm = true;
+        document.getElementById("harmonizer").innerHTML = "end color";
     }
 }
 

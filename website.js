@@ -306,14 +306,33 @@ function windowResized() {
 //        document.getElementById("sidebar-outer").style.height = "115";
         document.getElementById("sidebar-footer").style.display = "none";
         document.getElementById("store-content").style.width = "100%";
+        
+        
+        if (current_page != "home" && current_page != "sequencer") {
+            document.getElementById("sidebar-outer").style.display = "none";
+        }
+        else {
+            document.getElementById("sidebar-outer").style.display = "initial";
+        }
+        document.getElementById("store-content").style.marginLeft = "0";
+        var gridmarginLeft = (((window.innerWidth-40) % 302)/2) + 40;
+        if (window.innerWidth < 340) {
+            gridmarginLeft = 40;
+        }
+        console.log(gridwidth);
+        console.log(gridmarginLeft);
+
     }
     else  {
+        var gridmarginLeft = ((window.innerWidth-260) % 302)/2 +260;
+        document.getElementById("sidebar-outer").style.display = "initial";
         document.getElementById("sidebar-outer").classList.add("leftbar");
         document.getElementById("sidebar-outer").classList.remove("bottombar");
         document.getElementById("sidebar-parent").style.height = "100%";
         var gridwidth = "calc(100 - 260px)";
         document.getElementById("sidebar-footer").style.display = "initial";
         document.getElementById("store-content").style.width = "calc(90% - 300px)";
+        document.getElementById("store-content").style.marginLeft = "300px";
     }
     
     for (var i = 0; i < header_texts.length; i++) {
@@ -346,8 +365,9 @@ function windowResized() {
     mesh.update_nodesize(15 + 10*(fontsize - 19)/21);
     
     for (var i = 0; i < grids.length; i++) {
-        grids[i].style.width = gridwidth;
+        grids[i].style.width = gridwidth; grids[i].style.marginLeft=String(gridmarginLeft).concat("px");
     }
+    
 }
 
 function page_sw(page) {
@@ -379,14 +399,12 @@ function page_sw(page) {
         document.getElementById("container").style.display = "initial";
         document.getElementById("about-container").style.display = "table";
         document.getElementById("home").style.opacity = "0.8";
-        windowResized();
         sequencer_view = false;
         fullScreen = false;
     }
     else if (page == "sequencer") {
         document.getElementById("container").style.display = "initial";
         document.getElementById("sequencer").style.opacity = "0.8";
-        windowResized();
         sequencer_view = true;
     }
     else if (page == "music") {
@@ -403,6 +421,7 @@ function page_sw(page) {
         document.getElementById("store-content").style.display = "initial";
         document.getElementById("store").style.opacity = "0.8";
     }
+    windowResized();
     
 }
 

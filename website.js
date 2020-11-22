@@ -17,6 +17,7 @@ var sidebar_texts = document.getElementsByClassName("sidebar-item-text");
 var sidebar_items = document.getElementsByClassName("sidebar-item");
 
 var recording = false;
+var download_sound = false;
 var recorder;
 var soundFile;
 
@@ -263,7 +264,7 @@ function draw() {
             about_opac = Math.max(0, about_opac - .1);
         }
         else {
-            about_opac = Math.min(1, about_opac + .1);
+            about_opac =  Math.min(1, about_opac + .1);
         }
     }
     
@@ -280,6 +281,16 @@ function draw() {
         }
         mesh.update(speed);
         mesh.draw(isPlaying, about_opac);
+    }
+    
+    if (download_sound) {
+        try {
+            save(soundFile, 'myAudio.wav');
+            download_sound = false;
+        }
+        catch(err) {
+            console.log("failed attempt to download sound, trying again next frame")
+        }
     }
 }
 
@@ -371,6 +382,9 @@ function windowResized() {
         document.getElementById("store-content").style.width = "calc(90% - 300px)";
         document.getElementById("store-content").style.marginLeft = "300px";
         
+        for (var i = 0; i < sidebar_items.length; i++) {
+            sidebar_items[i].style.marginLeft = "0px";
+        }
     }
     
     for (var i = 0; i < header_texts.length; i++) {
@@ -380,7 +394,7 @@ function windowResized() {
     
     for (var i = 0; i < sidebar_texts.length; i++) {
         sidebar_texts[i].style.fontSize = String(8 + 5*(fontsize - 19)/21).concat("pt");
-        sidebar_texts[i].style.width = String(68 + 130*(fontsize - 19)/21).concat("px");
+        sidebar_texts[i].style.width = String(88 + 110*(fontsize - 19)/21).concat("px");
     }
     document.getElementById("coming_soon_text").style.fontSize = String(fontsize).concat("pt");
     document.getElementById("links_text").style.fontSize = String(9 + 6*(fontsize - 19)/21).concat("pt");
@@ -550,12 +564,7 @@ function toggle_record() {
         recorder.stop();
         document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
         if (confirm('would you like to download the audio you recorded?')) {
-            try {
-                saveSound(soundFile, 'myAudio.wav');
-            }
-            catch(err) {
-                alert("error saving file. this is a known bug that is usually resolved by trying again");
-            }
+            download_sound = true;
         }
     }
 }

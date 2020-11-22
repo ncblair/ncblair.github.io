@@ -13,6 +13,7 @@ var current_page;
 var header_texts = document.getElementsByClassName("header-item");
 var grids = document.getElementsByClassName("grid");
 var sidebar_texts = document.getElementsByClassName("sidebar-item-text");
+var sidebar_items = document.getElementsByClassName("sidebar-item");
 
 var recording = false;
 var recorder;
@@ -93,6 +94,32 @@ function setup() {
     document.getElementById("slider3").value = random(100);
     mesh = new Mesh(8);
     windowResized();
+    
+    document.getElementById("defaultCanvas0").onclick = function(){
+          if (sequencer_view) {
+              //const tmx = event.offsetX * width / canvas.clientWidth;
+              //const tmy = event.offsetY * height / canvas.clientHeight;
+              console.log("canvas pressed");
+              for (var i = 0; i < NOTES.length; i++) {
+                  for (var j = 0; j < SEQ_LEN; j++) {
+                      x = j*box_w;
+                      y = i*box_h;
+                      //if (tmx > x && tmx < x + box_w && tmy > y && tmy < y + box_h) {
+                      //    // in the box
+                      //    grid[i][j] = 1 - grid[i][j];
+                      //}
+                      if (mouseX > x && mouseX < x + box_w && mouseY > y && mouseY < y + box_h) {
+                              // in the box
+                              grid[i][j] = 1 - grid[i][j];
+                      }
+                  }
+              }
+        }
+        
+        if (!started) {
+            toggle_sound(32);
+        }
+    };
 }
 
 
@@ -224,7 +251,7 @@ function draw() {
                     curr_bassnote = 36;
                 }
                 bassSynth.play(midiToFreq(curr_bassnote), .3, 0, 1);
-                resolve_bass += 1;           
+                resolve_bass += 1;    
             }
             
             if (!sequencer_view) {
@@ -254,28 +281,34 @@ function draw() {
     }
 }
 
-function mousePressed(event) {
-    if (event.srcElement === document.getElementById("defaultCanvas0")) {
-        if (sequencer_view) {
-            const tmx = event.offsetX * width / canvas.clientWidth;
-            const tmy = event.offsetY * height / canvas.clientHeight;
-            for (var i = 0; i < NOTES.length; i++) {
-                for (var j = 0; j < SEQ_LEN; j++) {
-                    x = j*box_w;
-                    y = i*box_h;
-                    if (tmx > x && tmx < x + box_w && tmy > y && tmy < y + box_h) {
-                        // in the box
-                        grid[i][j] = 1 - grid[i][j];
-                    }
-                }
-            }
-        }
+//function mousePressed(event) {
+//    console.log("mouse clicked");
+//    if (event.srcElement === document.getElementById("defaultCanvas0")) {
+//        if (sequencer_view) {
+//            //const tmx = event.offsetX * width / canvas.clientWidth;
+//            //const tmy = event.offsetY * height / canvas.clientHeight;
+//            console.log("canvas pressed");
+//            for (var i = 0; i < NOTES.length; i++) {
+//                for (var j = 0; j < SEQ_LEN; j++) {
+//                    x = j*box_w;
+//                    y = i*box_h;
+//                    //if (tmx > x && tmx < x + box_w && tmy > y && tmy < y + box_h) {
+//                    //    // in the box
+//                    //    grid[i][j] = 1 - grid[i][j];
+//                    //}
+//                    if (mouseX > x && mouseX < x + box_w && mouseY > y && mouseY < y + box_h) {
+//                            // in the box
+//                            grid[i][j] = 1 - grid[i][j];
+//                    }
+//                }
+//            }
+//        }
         
-        if (!started) {
-            toggle_sound(32);
-        }
-    }
-}
+//        if (!started) {
+//            toggle_sound(32);
+//        }
+//    }
+//}
 
 
 function windowResized() {
@@ -300,20 +333,42 @@ function windowResized() {
             rightmargin = leftmargin / 2;
             leftmargin = leftmargin / 2;
         }
+        
         document.getElementById("sidebar-outer").classList.remove("leftbar");
         document.getElementById("sidebar-outer").classList.add("bottombar");
         document.getElementById("sidebar-parent").style.height = "115px";
 //        document.getElementById("sidebar-outer").style.height = "115";
         document.getElementById("sidebar-footer").style.display = "none";
         document.getElementById("store-content").style.width = "100%";
+        
+        
+        if (current_page != "home" && current_page != "sequencer") {
+            document.getElementById("sidebar-outer").style.display = "none";
+        }
+        else {
+            document.getElementById("sidebar-outer").style.display = "initial";
+        }
+        document.getElementById("store-content").style.marginLeft = "0";
+        var gridmarginLeft = (((window.innerWidth-20) % 302)/2) + 20;
+        if (window.innerWidth < 340) {
+            gridmarginLeft = 40;
+        }
+        
+        for (var i = 0; i < sidebar_items.length; i++) {
+            sidebar_items[i].style.marginLeft = String((document.getElementById("sidebar-parent").offsetWidth - (3 * sidebar_items[0].offsetWidth))/4).concat("px");
+        }
     }
     else  {
+        document.getElementById("sidebar-parent").style.paddingLeft="0";
+        var gridmarginLeft = ((window.innerWidth-250) % 302)/2 +250;
+        document.getElementById("sidebar-outer").style.display = "initial";
         document.getElementById("sidebar-outer").classList.add("leftbar");
         document.getElementById("sidebar-outer").classList.remove("bottombar");
         document.getElementById("sidebar-parent").style.height = "100%";
         var gridwidth = "calc(100 - 260px)";
         document.getElementById("sidebar-footer").style.display = "initial";
         document.getElementById("store-content").style.width = "calc(90% - 300px)";
+        document.getElementById("store-content").style.marginLeft = "300px";
     }
     
     for (var i = 0; i < header_texts.length; i++) {
@@ -323,13 +378,13 @@ function windowResized() {
     
     for (var i = 0; i < sidebar_texts.length; i++) {
         sidebar_texts[i].style.fontSize = String(8 + 5*(fontsize - 19)/21).concat("pt");
-        sidebar_texts[i].style.width = String(98 + 100*(fontsize - 19)/21).concat("px");
+        sidebar_texts[i].style.width = String(68 + 130*(fontsize - 19)/21).concat("px");
     }
     
-    if (window.innerWidth < 465) {
-        document.getElementById("sidebar-parent").style.height = "170px";
-        document.getElementById("sidebar-outer").style.height = "170px";
-    }
+//    if (window.innerWidth < 465) {
+//        document.getElementById("sidebar-parent").style.height = "170px";
+//        document.getElementById("sidebar-outer").style.height = "170px";
+//    }
     
     document.getElementById("title").style.fontSize = String(fontsize).concat("pt");
     document.getElementById("title").style.width = String(titlespace).concat("px");
@@ -346,8 +401,9 @@ function windowResized() {
     mesh.update_nodesize(15 + 10*(fontsize - 19)/21);
     
     for (var i = 0; i < grids.length; i++) {
-        grids[i].style.width = gridwidth;
+        grids[i].style.width = gridwidth; grids[i].style.marginLeft=String(gridmarginLeft).concat("px");
     }
+    
 }
 
 function page_sw(page) {
@@ -379,14 +435,12 @@ function page_sw(page) {
         document.getElementById("container").style.display = "initial";
         document.getElementById("about-container").style.display = "table";
         document.getElementById("home").style.opacity = "0.8";
-        windowResized();
         sequencer_view = false;
         fullScreen = false;
     }
     else if (page == "sequencer") {
         document.getElementById("container").style.display = "initial";
         document.getElementById("sequencer").style.opacity = "0.8";
-        windowResized();
         sequencer_view = true;
     }
     else if (page == "music") {
@@ -403,6 +457,7 @@ function page_sw(page) {
         document.getElementById("store-content").style.display = "initial";
         document.getElementById("store").style.opacity = "0.8";
     }
+    windowResized();
     
 }
 

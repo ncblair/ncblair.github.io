@@ -571,3 +571,34 @@ a {
 */
 }
 
+.linktext {
+    font-size: 16px;
+    font-family:monospace;
+}
+
+.linkentry {
+    display:block;
+    width:100%;
+    max-width:668px;
+    margin-bottom:24px;
+    border:1px solid rgba(252, 252, 252, 0.75);
+    border-radius:12px;
+    padding:12px;
+    
+    transition: box-shadow 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s, color 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s, border-color 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s, background-color 0.25s cubic-bezier(0.08, 0.59, 0.29, 0.99) 0s;
+}
+
+.linkentry:hover {
+    box-shadow:0px 0px 15px 3px rgba(255, 255, 255, .3);
+    border-color:rgba(255, 255, 255, .9);
+    background-color:rgba(10, 10, 10, .5);
+}
+
+#links-container {
+    height:100%;
+    vertical-align:baseline;
+    display:block;
+    margin:24px;
+    
+}
+

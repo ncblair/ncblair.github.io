@@ -83,6 +83,9 @@ function setup() {
 
     document.body.onkeyup = function(e){toggle_sound(e)};
     
+    //setup email link
+    
+    document.getElementById("email-link").href = "mailto:nblair@".concat("berkeley.edu");
     
     textAlign(CENTER, CENTER);
     textFont(font);
@@ -396,8 +399,8 @@ function windowResized() {
         sidebar_texts[i].style.fontSize = String(8 + 5*(fontsize - 19)/21).concat("pt");
         sidebar_texts[i].style.width = String(88 + 110*(fontsize - 19)/21).concat("px");
     }
-    document.getElementById("coming_soon_text").style.fontSize = String(fontsize).concat("pt");
-    document.getElementById("links_text").style.fontSize = String(9 + 6*(fontsize - 19)/21).concat("pt");
+//    document.getElementById("coming_soon_text").style.fontSize = String(fontsize).concat("pt");
+//    document.getElementById("links_text").style.fontSize = String(9 + 6*(fontsize - 19)/21).concat("pt");
     
 //    if (window.innerWidth < 465) {
 //        document.getElementById("sidebar-parent").style.height = "170px";

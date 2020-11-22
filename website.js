@@ -9,6 +9,7 @@ var started;
 var box_w;
 var box_h;
 var light_color;
+var about_opac;
 var current_page;
 var header_texts = document.getElementsByClassName("header-item");
 var grids = document.getElementsByClassName("grid");
@@ -46,13 +47,13 @@ function preload() {
 
 function setup() {
     frameRate(4);
-
     started=false;
     current_page = "home";
     grid = [];
     position = 0;
     isPlaying = false;
     light_color = color("white");
+    about_opac = 1;
 
     var rand1 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
     var rand2 = Math.floor(Math.random()*NOTES.length*SEQ_LEN);
@@ -81,7 +82,7 @@ function setup() {
 
     document.body.onkeyup = function(e){toggle_sound(e)};
     
-    textSize(height/5);
+    
     textAlign(CENTER, CENTER);
     textFont(font);
     
@@ -93,7 +94,6 @@ function setup() {
     delay.amp(0);
     document.getElementById("slider3").value = random(100);
     mesh = new Mesh(8);
-    windowResized();
     
     document.getElementById("defaultCanvas0").onclick = function(){
           if (sequencer_view) {
@@ -120,6 +120,11 @@ function setup() {
             toggle_sound(32);
         }
     };
+    
+    
+    windowResized();
+    document.getElementById("loading").style.display= "none";
+    
 }
 
 
@@ -129,6 +134,7 @@ function draw() {
     var pitch_shift = 1 + .05946309436*(document.getElementById("slider2").value - 1)/99;
     var harm_vel = document.getElementById("slider1").value/500;
     delay.amp(signal_delay);
+    
     //--visual and loop--
     if (sequencer_view || !isPlaying) {
         clear();
@@ -139,18 +145,7 @@ function draw() {
         specularMaterial(255, 254 - signal_delay*150);
         plane(width, height);
     }
-    
-    //flash sidebar if recording
-    if (recording) {
-        if (position % 4 < 2) {
-            document.getElementById("sidebar").style.borderColor = "red";
-        }
-        else {
-            document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
-        }
-        
-    }
-
+    // resize canvas with the beat
     if (resizeCanv) {
         if (sequencer_view) {
             resizeCanvas(document.getElementById("container").offsetWidth, Math.min(document.getElementById("container").offsetWidth, document.getElementById("container").offsetHeight));
@@ -161,20 +156,23 @@ function draw() {
             resizeCanv = false;
         }
     }
+    
+    //text opacity
+    //document.getElementById("about-text").style.color = "rgba(255, 255, 255, ".concat(String(about_opac), ")");
+    document.getElementById("about-text").style.opacity = String(about_opac);
 
     if (sequencer_view && !started) {
         pixel_rect(-width/2, -height/2, width, height, 20, 1, color(255, 255, 255), 20);
-        if (!started) {
-            fill(255, 255, 255);
-            text('sound on.\n press to start.', 0, 0);
-        }
+        fill(255, 255, 255);
+        textSize(height/5);
+        text('sound on.\n press to start.', 0, 0);
     }
 
 
     if (started) {
         if (sequencer_view) {
             strokeWeight(1);
-            if (harmonize && position < 4) {
+            if (isPlaying && harmonize && position < 4) {
                 var strokecolor = color(random(255), random(255), random(255));
             }
             else {
@@ -262,6 +260,10 @@ function draw() {
         
         if (isPlaying) {
             position = (position + 1) % SEQ_LEN;
+            about_opac = Math.max(0, about_opac - .1);
+        }
+        else {
+            about_opac = Math.min(1, about_opac + .1);
         }
     }
     
@@ -277,7 +279,7 @@ function draw() {
             background(0);
         }
         mesh.update(speed);
-        mesh.draw(isPlaying);
+        mesh.draw(isPlaying, about_opac);
     }
 }
 
@@ -313,7 +315,6 @@ function draw() {
 
 function windowResized() {
     resizeCanv = true;
-    textSize(height/5);
     var rightmargin = 240 - Math.min(240, Math.max(1077- window.innerWidth, 0));
     if (current_page=="sequencer") {
         var leftmargin = 300 - Math.min(300, Math.max(837- window.innerWidth, 0));
@@ -417,6 +418,7 @@ function page_sw(page) {
     else if (current_page == "sequencer") {
         document.getElementById("container").style.display = "none";
         document.getElementById("sequencer").style.opacity = "1.0";
+        sequencer_view=false;
     }
     else if (current_page == "music") {
         document.getElementById("music-masonry").style.display = "none";
@@ -435,7 +437,6 @@ function page_sw(page) {
         document.getElementById("container").style.display = "initial";
         document.getElementById("about-container").style.display = "table";
         document.getElementById("home").style.opacity = "0.8";
-        sequencer_view = false;
         fullScreen = false;
     }
     else if (page == "sequencer") {

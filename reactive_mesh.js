@@ -21,24 +21,25 @@ class Mesh {
         }
     }
     
-    draw(isPlaying) {
+    draw(isPlaying, about_opac) {
         pointLight(100, 100, 100, 0, 0, 0);
         strokeWeight(2)
         for (var i = 0; i < this.nodes.length; i++) {
             this.nodes[i].draw();
-            if (true) {
-                for (var j = i; j < this.nodes.length;j++) {
-                    var s = .9; //threshold for size of center square
-                    if ((this.nodes[i].pos[0]>s && this.nodes[j].pos[0]>s) || (this.nodes[i].pos[1]>s && this.nodes[j].pos[1]>s) || (this.nodes[i].pos[0]<(-1*s) && this.nodes[j].pos[0]<(-1*s)) || (this.nodes[i].pos[1]<(-1*s) && this.nodes[j].pos[1]<(-1*s))) {
-                        stroke(255);
-                        beginShape(LINES);
-                        var jp = this.nodes[j].cpos();
-                        var ip = this.nodes[i].cpos();
-                        vertex(ip[0], ip[1], ip[2]);
-                        vertex(jp[0], jp[1], jp[2]);
-                        endShape();
-                    }
+            for (var j = i; j < this.nodes.length;j++) {
+                var s = .9; //threshold for size of center square
+                if ((this.nodes[i].pos[0]>s && this.nodes[j].pos[0]>s) || (this.nodes[i].pos[1]>s && this.nodes[j].pos[1]>s) || (this.nodes[i].pos[0]<(-1*s) && this.nodes[j].pos[0]<(-1*s)) || (this.nodes[i].pos[1]<(-1*s) && this.nodes[j].pos[1]<(-1*s))) {
+                    stroke(255);
                 }
+                else {
+                    stroke(255*(1 - about_opac*about_opac));
+                }
+                beginShape(LINES);
+                var jp = this.nodes[j].cpos();
+                var ip = this.nodes[i].cpos();
+                vertex(ip[0], ip[1], ip[2]);
+                vertex(jp[0], jp[1], jp[2]);
+                endShape();
             }
 
         }

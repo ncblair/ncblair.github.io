@@ -252,7 +252,7 @@ function draw() {
                 if ((resolve_bass % 4 == 0) && (random() > .7)) {
                     curr_bassnote = 36;
                 }
-                bassSynth.play(midiToFreq(curr_bassnote), .3, 0, 1);
+                bassSynth.play(midiToFreq(curr_bassnote)*pitch_shift, .3, 0, 1);
                 resolve_bass += 1;    
             }
             

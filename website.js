@@ -561,6 +561,9 @@ function toggle_record() {
     if (recording) {
         document.getElementById("record").innerHTML = "stop";
         recorder.record(soundFile);
+        if (!isPlaying) {
+            toggle_sound(32);
+        }
     }
     else {
         document.getElementById("record").innerHTML = "record audio";
@@ -568,6 +571,9 @@ function toggle_record() {
         document.getElementById("sidebar").style.borderColor = "rgba(220, 220, 220, .95)";
         if (confirm('would you like to download the audio you recorded?')) {
             download_sound = true;
+        }
+        if (isPlaying) {
+            toggle_sound(32);
         }
     }
 }

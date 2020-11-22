@@ -37,7 +37,7 @@ footer, header, hgroup, menu, nav, section {
 body {
     margin: 0;
     overflow-x: hidden;
-    //background-color:black;
+    background-color:black;
     background-image:url("img/background-dirty.png");
     line-height: 1;
     color:white;

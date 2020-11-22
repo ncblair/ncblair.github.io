@@ -238,6 +238,8 @@ a {
 /*    border:1px solid rgba(220, 220, 220, .95);*/
     
     height: calc(100% - 20px);
+    height: -webkit-calc(100% - 20px);
+    height: -moz-calc(100% - 20px);
 /*    background-image: linear-gradient(rgb(150, 150, 150), rgb(70, 70, 70));*/
     background-color:black;
     overflow:hidden;

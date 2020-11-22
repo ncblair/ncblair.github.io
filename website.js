@@ -292,7 +292,7 @@ function draw() {
             download_sound = false;
         }
         catch(err) {
-            console.log("failed attempt to download sound, trying again next frame")
+            console.log("failed attempt to download sound, trsying again next frame")
         }
     }
 }

@@ -121,8 +121,7 @@ function setup() {
         }
     };
     
-    
-    windowResized();
+    page_sw("home");
     document.getElementById("loading").style.display= "none";
     
 }

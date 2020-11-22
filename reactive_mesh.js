@@ -32,7 +32,7 @@ class Mesh {
                     stroke(255);
                 }
                 else {
-                    stroke(255*(1 - about_opac*about_opac));
+                    stroke(255, 255*(1 - about_opac*about_opac));
                 }
                 beginShape(LINES);
                 var jp = this.nodes[j].cpos();

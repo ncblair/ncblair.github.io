@@ -121,8 +121,9 @@ function setup() {
         }
     };
     
-    page_sw("home");
     document.getElementById("loading").style.display= "none";
+    page_sw("home");
+    windowResized();
     
 }
 
@@ -351,7 +352,7 @@ function windowResized() {
         document.getElementById("store-content").style.marginLeft = "0";
         var gridmarginLeft = (((window.innerWidth-20) % 302)/2) + 20;
         if (window.innerWidth < 340) {
-            gridmarginLeft = 40;
+            gridmarginLeft = 20;
         }
         
         for (var i = 0; i < sidebar_items.length; i++) {
@@ -369,6 +370,7 @@ function windowResized() {
         document.getElementById("sidebar-footer").style.display = "initial";
         document.getElementById("store-content").style.width = "calc(90% - 300px)";
         document.getElementById("store-content").style.marginLeft = "300px";
+        
     }
     
     for (var i = 0; i < header_texts.length; i++) {
@@ -380,6 +382,8 @@ function windowResized() {
         sidebar_texts[i].style.fontSize = String(8 + 5*(fontsize - 19)/21).concat("pt");
         sidebar_texts[i].style.width = String(68 + 130*(fontsize - 19)/21).concat("px");
     }
+    document.getElementById("coming_soon_text").style.fontSize = String(fontsize).concat("pt");
+    document.getElementById("links_text").style.fontSize = String(9 + 6*(fontsize - 19)/21).concat("pt");
     
 //    if (window.innerWidth < 465) {
 //        document.getElementById("sidebar-parent").style.height = "170px";
@@ -389,8 +393,6 @@ function windowResized() {
     document.getElementById("title").style.fontSize = String(fontsize).concat("pt");
     document.getElementById("title").style.width = String(titlespace).concat("px");
     document.getElementById("header-links").style.width = "calc(100%-".concat(String(titlespace), "px)");
-    
-    
     document.getElementById("container").style.marginLeft = String(leftmargin).concat("px");
     document.getElementById("about-container").style.marginLeft = String(leftmargin).concat("px");
     document.getElementById("container").style.width = "calc(100% - ".concat(String(leftmargin), "px - ", String(rightmargin), "px)");  

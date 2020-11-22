@@ -142,6 +142,7 @@ a {
 	    -ms-flex-direction: row;
 	        flex-direction: row;
 	pointer-events: none;
+    background-image:url("img/background-dirty.png");
 }
 
 #header-links{
@@ -451,19 +452,19 @@ a {
 
 #store-content {
     display:none;
-    padding-top:calc(18vh + 5%);
+    padding-top:calc(13vh + 5%);
     text-align:center;
     width: calc(90% - 300px);
     height: calc(87% - 13vh);
 }
 
+/*
 .column {
   float: left;
   width: 50%;
 }
 
 
-/* Clear floats after the columns */
 .row:after {
   content: "";
   display: table;
@@ -473,6 +474,7 @@ a {
 .coming_soon_text {
     font-size:40pt;
 }
+*/
 
 .grid-item {
     width:300px;
@@ -580,6 +582,7 @@ a {
     display:block;
     width:100%;
     max-width:668px;
+    margin: 0 auto;
     margin-bottom:24px;
     border:1px solid rgba(252, 252, 252, 0.75);
     border-radius:12px;
@@ -599,6 +602,5 @@ a {
     vertical-align:baseline;
     display:block;
     margin:24px;
-    
 }
 

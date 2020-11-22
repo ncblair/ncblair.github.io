@@ -224,7 +224,6 @@ a {
 /*------------------------------------------*/
 
 #sidebar{
-    position:fixed;;
 	width: calc(100% - 20px);
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -233,7 +232,7 @@ a {
 	-webkit-box-direction: normal;
     -ms-flex-direction: row;
     flex-direction: row;
-	position: relative;
+	position: absolute;
     margin:10px;
 /*    border:1px solid rgba(220, 220, 220, .95);*/
     

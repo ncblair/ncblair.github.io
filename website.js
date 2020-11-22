@@ -139,7 +139,7 @@ function draw() {
         pixel_rect(-width/2, -height/2, width, height, 20, 1, color(255, 255, 255), 20);
         if (!started) {
             fill(255, 255, 255);
-            text('sound on.\n press spacebar.', 0, 0);
+            text('sound on.\n press to start.', 0, 0);
         }
     }
 

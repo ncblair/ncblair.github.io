@@ -38,7 +38,7 @@ body {
     margin: 0;
     overflow-x: hidden;
     background-color:black;
-    background-image:url("img/background-dirty.png");
+    //background-image:url("img/background-dirty.png");
     line-height: 1;
     color:white;
 }
@@ -142,7 +142,7 @@ a {
 	    -ms-flex-direction: row;
 	        flex-direction: row;
 	pointer-events: none;
-    background-image:url("img/background-dirty.png");
+    //background-image:url("img/background-dirty.png");
 }
 
 #header-links{

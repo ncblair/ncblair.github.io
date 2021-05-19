@@ -143,6 +143,7 @@ a {
 	        flex-direction: row;
 	pointer-events: none;
     //background-image:url("img/background-dirty.png");
+    background-color:black;
 }
 
 #header-links{
